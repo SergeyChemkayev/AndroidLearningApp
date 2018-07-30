@@ -8,26 +8,26 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewActivity extends AppCompatActivity {
+public class DataActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler_view);
+        setContentView(R.layout.activity_data);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
-        List<String> list = new ArrayList<>();
-        list = fillItemsList(list);
-        MyAdapter adapter = new MyAdapter(list);
+        List<String> list = fillItemsList();
+        DataAdapter adapter = new DataAdapter(list);
         recyclerView.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
     }
 
-    private List<String> fillItemsList(List<String> list) {
+    private List<String> fillItemsList() {
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
             list.add("Item #" + (i + 1));
         }

@@ -10,35 +10,45 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder> {
     private List<String> dataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private TextView textView;
 
-        public ViewHolder(View v) {
+        public ItemViewHolder(View v) {
             super(v);
             textView = (TextView) itemView.findViewById(R.id.item_name);
         }
+
+        public void bind(String item){
+            textView.setText(item);
+        }
+
     }
 
-    public MyAdapter(List<String> myDataSet) {
+    public DataAdapter(List<String> myDataSet) {
         dataSet = myDataSet;
     }
 
+    public void setDataSet(List<String> dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    @NonNull
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View itemView = inflater.inflate(R.layout.item, parent, false);
 
-        return new ViewHolder(itemView);
+        return new ItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(dataSet.get(position));
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        holder.bind(dataSet.get(position));
     }
 
     @Override
