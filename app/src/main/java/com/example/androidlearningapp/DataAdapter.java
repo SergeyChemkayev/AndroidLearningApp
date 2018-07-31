@@ -13,12 +13,12 @@ import java.util.List;
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder> {
     private List<String> itemsList;
 
-    public DataAdapter(List<String> itemsList) {
+    public void setItemsList(List<String> itemsList) {
         this.itemsList = itemsList;
     }
 
-    public void setItemsList(List<String> itemsList) {
-        this.itemsList = itemsList;
+    public List<String> getItemsList() {
+        return itemsList;
     }
 
     @NonNull

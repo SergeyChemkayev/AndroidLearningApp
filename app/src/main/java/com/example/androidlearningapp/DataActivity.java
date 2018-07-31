@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -24,8 +25,12 @@ public class DataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         List<String> list = fillItemsList();
-        DataAdapter adapter = new DataAdapter(list);
+        DataAdapter adapter = new DataAdapter();
         recyclerView.setAdapter(adapter);
+        ItemsDiffUtilCallback itemsDiffUtilCallback = new ItemsDiffUtilCallback(adapter.getItemsList(), list);
+        DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(itemsDiffUtilCallback);
+        adapter.setItemsList(list);
+        itemsDiffResult.dispatchUpdatesTo(adapter);
     }
 
     private List<String> fillItemsList() {
