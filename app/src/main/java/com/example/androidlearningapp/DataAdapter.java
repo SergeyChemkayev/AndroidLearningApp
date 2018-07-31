@@ -13,20 +13,6 @@ import java.util.List;
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder> {
     private List<String> itemsList;
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
-
-        public ItemViewHolder(View v) {
-            super(v);
-            textView = (TextView) itemView.findViewById(R.id.item_name);
-        }
-
-        public void bind(String item) {
-            textView.setText(item);
-        }
-
-    }
-
     public DataAdapter(List<String> itemsList) {
         this.itemsList = itemsList;
     }
@@ -48,17 +34,25 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        if (itemsList == null || itemsList.size() <= position) {
-            return;
-        }
         holder.bind(itemsList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        if (itemsList == null) {
-            return 0;
+        return itemsList == null ? 0 : itemsList.size();
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private TextView textView;
+
+        public ItemViewHolder(View v) {
+            super(v);
+            textView = (TextView) itemView.findViewById(R.id.item_name);
         }
-        return itemsList.size();
+
+        public void bind(String item) {
+            textView.setText(item);
+        }
+
     }
 }

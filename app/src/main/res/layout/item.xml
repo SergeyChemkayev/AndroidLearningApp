@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/text_view_margin_start"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
     android:paddingBottom="@dimen/item_padding_bottom"
     android:paddingEnd="@dimen/item_padding_end"
     android:paddingStart="@dimen/item_padding_start"
-    android:paddingTop="@dimen/item_padding_top"
-    android:id="@+id/item_name"
-    android:layout_marginStart="@dimen/text_view_margin_start"
-    android:layout_weight="1"
-    android:elegantTextHeight="true"/>
+    android:paddingTop="@dimen/item_padding_top" />
