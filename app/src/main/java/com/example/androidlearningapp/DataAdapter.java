@@ -2,6 +2,7 @@ package com.example.androidlearningapp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
     private List<String> itemsList;
 
     public void setItemsList(List<String> itemsList) {
+        ItemsDiffUtilCallback itemsDiffUtilCallback = new ItemsDiffUtilCallback(this.itemsList, itemsList);
+        DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(itemsDiffUtilCallback);
         this.itemsList = itemsList;
-    }
-
-    public List<String> getItemsList() {
-        return itemsList;
+        itemsDiffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -26,9 +26,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View itemView = inflater.inflate(R.layout.item, parent, false);
-
         return new ItemViewHolder(itemView);
     }
 
@@ -53,6 +51,5 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
         public void bind(String item) {
             textView.setText(item);
         }
-
     }
 }
