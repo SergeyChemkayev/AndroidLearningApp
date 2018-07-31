@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android Learning App</string>
+    <string name="recycler_view_button">Recycler View</string>
 </resources>
