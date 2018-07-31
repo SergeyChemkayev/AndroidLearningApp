@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder> {
-    private List<String> dataSet;
+    private List<String> itemsList;
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
@@ -21,18 +21,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
             textView = (TextView) itemView.findViewById(R.id.item_name);
         }
 
-        public void bind(String item){
+        public void bind(String item) {
             textView.setText(item);
         }
 
     }
 
-    public DataAdapter(List<String> myDataSet) {
-        dataSet = myDataSet;
+    public DataAdapter(List<String> itemsList) {
+        this.itemsList = itemsList;
     }
 
-    public void setDataSet(List<String> dataSet) {
-        this.dataSet = dataSet;
+    public void setItemsList(List<String> itemsList) {
+        this.itemsList = itemsList;
     }
 
     @NonNull
@@ -48,11 +48,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        holder.bind(dataSet.get(position));
+        if (itemsList == null || itemsList.size() <= position) {
+            return;
+        }
+        holder.bind(itemsList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        if (itemsList == null) {
+            return 0;
+        }
+        return itemsList.size();
     }
 }

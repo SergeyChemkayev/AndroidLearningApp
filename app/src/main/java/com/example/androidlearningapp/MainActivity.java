@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button button;
 
@@ -16,13 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = (Button) findViewById(R.id.button);
-        View.OnClickListener ocButton = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToDataActivity(view);
-            }
-        };
-        button.setOnClickListener(ocButton);
+        button.setOnClickListener(this);
     }
 
     public void goToDataActivity(View view) {
@@ -30,5 +24,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button:
+                goToDataActivity(view);
+                break;
+        }
+    }
 }

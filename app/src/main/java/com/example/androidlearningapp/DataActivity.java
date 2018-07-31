@@ -2,7 +2,6 @@ package com.example.androidlearningapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,9 +20,6 @@ public class DataActivity extends AppCompatActivity {
         List<String> list = fillItemsList();
         DataAdapter adapter = new DataAdapter(list);
         recyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
     }
 
     private List<String> fillItemsList() {

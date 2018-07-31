@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/item_padding_bottom"
-    android:paddingTop="@dimen/item_padding_top"
     android:paddingEnd="@dimen/item_padding_end"
-    android:paddingStart="@dimen/item_padding_start">
+    android:paddingStart="@dimen/item_padding_start"
+    android:paddingTop="@dimen/item_padding_top">
 
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginStart="@dimen/text_view_margin_start"
-        android:elegantTextHeight="true"/>
+        android:layout_weight="1"
+        android:elegantTextHeight="true" />
 
 </LinearLayout>
