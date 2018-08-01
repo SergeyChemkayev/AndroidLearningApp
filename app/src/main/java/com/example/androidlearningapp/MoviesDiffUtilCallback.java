@@ -4,11 +4,11 @@ import android.support.v7.util.DiffUtil;
 
 import java.util.List;
 
-public class ItemsDiffUtilCallback extends DiffUtil.Callback {
-    private final List<String> oldList;
-    private final List<String> newList;
+public class MoviesDiffUtilCallback extends DiffUtil.Callback {
+    private final List<Movie> oldList;
+    private final List<Movie> newList;
 
-    public ItemsDiffUtilCallback(List<String> oldList, List<String> newList) {
+    public MoviesDiffUtilCallback(List<Movie> oldList, List<Movie> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }
@@ -25,7 +25,7 @@ public class ItemsDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        return oldList.get(oldItemPosition).getName().equals(newList.get(newItemPosition).getName());
     }
 
     @Override

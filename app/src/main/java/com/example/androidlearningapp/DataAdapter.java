@@ -7,49 +7,67 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ItemViewHolder> {
-    private List<String> itemsList;
+public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MovieViewHolder> {
+    private List<Movie> moviesList;
 
-    public void setItemsList(List<String> itemsList) {
-        ItemsDiffUtilCallback itemsDiffUtilCallback = new ItemsDiffUtilCallback(this.itemsList, itemsList);
-        DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(itemsDiffUtilCallback);
-        this.itemsList = itemsList;
+    public void setMoviesList(List<Movie> moviesList) {
+        MoviesDiffUtilCallback moviesDiffUtilCallback = new MoviesDiffUtilCallback(this.moviesList, moviesList);
+        DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(moviesDiffUtilCallback);
+        this.moviesList = moviesList;
         itemsDiffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.item, parent, false);
-        return new ItemViewHolder(itemView);
+        return new MovieViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        holder.bind(itemsList.get(position));
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+        holder.bind(moviesList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return itemsList == null ? 0 : itemsList.size();
+        return moviesList == null ? 0 : moviesList.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
+    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+        private TextView nameView;
+        private TextView nameEngView;
+        private TextView descriptionView;
+        private TextView premiereDateView;
+        private ImageView movieCoverView;
 
-        public ItemViewHolder(View v) {
+        public MovieViewHolder(View v) {
             super(v);
-            textView = (TextView) itemView.findViewById(R.id.item_name);
+            nameView = (TextView) itemView.findViewById(R.id.movie_name_text_view);
+            nameEngView = (TextView) itemView.findViewById(R.id.movie_name_eng_text_view);
+            descriptionView = (TextView) itemView.findViewById(R.id.description_text_view);
+            premiereDateView = (TextView) itemView.findViewById(R.id.premiere_date_text_view);
+            movieCoverView = (ImageView) itemView.findViewById(R.id.movie_cover_image_view);
         }
 
-        public void bind(String item) {
-            textView.setText(item);
+        public void bind(Movie movie) {
+            nameView.setText(movie.getName());
+            nameEngView.setText(movie.getNameEng());
+            descriptionView.setText(movie.getDescription());
+            premiereDateView.setText(movie.getPremiere());
+            Glide.with(itemView.getContext())
+                    .load(movie.getImage())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(movieCoverView);
         }
     }
 }
