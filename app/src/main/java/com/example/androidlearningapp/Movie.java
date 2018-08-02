@@ -1,23 +1,19 @@
 package com.example.androidlearningapp;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Objects;
 
 public class Movie {
     @SerializedName("image")
-    @Expose
     private String image;
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("name_eng")
-    @Expose
     private String nameEng;
     @SerializedName("premiere")
-    @Expose
     private String premiere;
     @SerializedName("description")
-    @Expose
     private String description;
 
     public void setImage(String image) {
@@ -60,25 +56,20 @@ public class Movie {
         return description;
     }
 
-    public boolean equals(Object obj)
-    {
-        if(obj == this)
-            return true;
-
-        if(obj == null)
-            return false;
-
-        if(!(getClass() == obj.getClass()))
-            return false;
-        else
-        {
-            Movie tmp = (Movie)obj;
-            return tmp.getName().equals(this.name) &&
-                    tmp.getImage().equals(this.image) &&
-                    tmp.getNameEng().equals(this.nameEng) &&
-                    tmp.getDescription().equals(this.description) &&
-                    tmp.getPremiere().equals(this.premiere);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(getImage(), movie.getImage()) &&
+                Objects.equals(getName(), movie.getName()) &&
+                Objects.equals(getNameEng(), movie.getNameEng()) &&
+                Objects.equals(getPremiere(), movie.getPremiere()) &&
+                Objects.equals(getDescription(), movie.getDescription());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getImage(), getName(), getNameEng(), getPremiere(), getDescription());
+    }
 }

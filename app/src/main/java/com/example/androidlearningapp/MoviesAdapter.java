@@ -11,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MovieViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
     private List<Movie> moviesList;
 
     public void setMoviesList(List<Movie> moviesList) {
@@ -29,8 +30,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MovieViewHolde
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.item, parent, false);
-        return new MovieViewHolder(itemView);
+        View movieItemView = inflater.inflate(R.layout.movie_item, parent, false);
+        return new MovieViewHolder(movieItemView);
     }
 
     @Override
@@ -64,9 +65,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MovieViewHolde
             nameEngView.setText(movie.getNameEng());
             descriptionView.setText(movie.getDescription());
             premiereDateView.setText(movie.getPremiere());
+            RequestOptions options = new RequestOptions();
+            options.centerCrop();
             Glide.with(itemView.getContext())
                     .load(movie.getImage())
-                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .apply(options)
                     .into(movieCoverView);
         }
     }

@@ -32,7 +32,7 @@
     </style>
 
     <style name="Text.Primary">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="Text.Secondary">
