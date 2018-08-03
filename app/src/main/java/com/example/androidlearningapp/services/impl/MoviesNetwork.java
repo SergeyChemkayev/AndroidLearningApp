@@ -20,7 +20,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MoviesNetwork implements MoviesRemoteSource {
-    private static final String BASE_URL = "http://www.mocky.io/v2/";
+    private static final int TIMEOUT_SECONDS = 20;
     private static volatile MoviesRemoteSource INSTANCE = null;
     private MoviesApi moviesApi;
     private GetMoviesListener getMoviesListener;
@@ -40,15 +40,15 @@ public class MoviesNetwork implements MoviesRemoteSource {
 
     private MoviesNetwork() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .build();
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .setDateFormat("yyyy-MM-dd") .create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(MoviesApi.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();

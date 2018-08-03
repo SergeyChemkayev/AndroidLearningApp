@@ -33,6 +33,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         setContentView(R.layout.activity_data);
         recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
         emptyView = (View) findViewById(R.id.data_empty_view);
+        progressBar = (ProgressBar) findViewById(R.id.data_loading_progress_bar);
         adapter = new MoviesAdapter();
         recyclerView.setAdapter(adapter);
         getMovies();
@@ -54,9 +55,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesSuccess(List<Movie> movies) {
         progressBar.setVisibility(View.GONE);
         if (movies == null || movies.isEmpty()) {
-            showEmptyView(true);
+            setViewsVisibility(true);
         } else {
-            showEmptyView(false);
+            setViewsVisibility(false);
             adapter.setMoviesList(movies);
         }
     }
@@ -64,13 +65,12 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     @Override
     public void onGetMoviesError(Throwable error) {
         progressBar.setVisibility(View.GONE);
-        showEmptyView(true);
+        setViewsVisibility(true);
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
-
     }
 
-    private void showEmptyView(boolean flag) {
-        if (flag) {
+    private void setViewsVisibility(boolean isMoviesEmpty) {
+        if (isMoviesEmpty) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         } else {
@@ -80,7 +80,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void getMovies() {
-        progressBar = (ProgressBar) findViewById(R.id.data_loading_progress_bar);
         progressBar.setVisibility(View.VISIBLE);
         moviesRemoteSource.getMovies();
     }
