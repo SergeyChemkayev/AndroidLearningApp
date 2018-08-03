@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.listeners.GetMoviesListener;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements GetMoviesListener {
     private RecyclerView recyclerView;
-    private TextView emptyView;
+    private View emptyView;
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private ProgressBar progressBar;
@@ -32,12 +31,11 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        emptyView = (TextView) findViewById(R.id.empty_view);
+        recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
+        emptyView = (View) findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
         recyclerView.setAdapter(adapter);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        moviesRemoteSource.getMovies();
+        getMovies();
     }
 
     @Override
@@ -56,9 +54,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesSuccess(List<Movie> movies) {
         progressBar.setVisibility(View.GONE);
         if (movies == null || movies.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
+            showEmptyView(true);
         } else {
+            showEmptyView(false);
             adapter.setMoviesList(movies);
         }
     }
@@ -66,11 +64,24 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     @Override
     public void onGetMoviesError(Throwable error) {
         progressBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.GONE);
-        emptyView.setVisibility(View.VISIBLE);
+        showEmptyView(true);
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
 
     }
 
+    private void showEmptyView(boolean flag) {
+        if (flag) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+    }
 
+    private void getMovies() {
+        progressBar = (ProgressBar) findViewById(R.id.data_loading_progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        moviesRemoteSource.getMovies();
+    }
 }

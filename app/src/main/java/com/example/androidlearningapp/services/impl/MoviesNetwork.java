@@ -6,6 +6,9 @@ import com.example.androidlearningapp.listeners.GetMoviesListener;
 import com.example.androidlearningapp.ResultList;
 import com.example.androidlearningapp.api.MoviesApi;
 import com.example.androidlearningapp.services.MoviesRemoteSource;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,9 +44,12 @@ public class MoviesNetwork implements MoviesRemoteSource {
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .build();
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setDateFormat("yyyy-MM-dd") .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
         moviesApi = retrofit.create(MoviesApi.class);
@@ -73,6 +79,4 @@ public class MoviesNetwork implements MoviesRemoteSource {
             }
         });
     }
-
-
 }

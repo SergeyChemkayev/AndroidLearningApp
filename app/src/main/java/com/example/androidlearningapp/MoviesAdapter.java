@@ -55,8 +55,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             super(v);
             nameView = (TextView) itemView.findViewById(R.id.movie_name_text_view);
             nameEngView = (TextView) itemView.findViewById(R.id.movie_name_eng_text_view);
-            descriptionView = (TextView) itemView.findViewById(R.id.description_text_view);
-            premiereDateView = (TextView) itemView.findViewById(R.id.premiere_date_text_view);
+            descriptionView = (TextView) itemView.findViewById(R.id.movie_description_text_view);
+            premiereDateView = (TextView) itemView.findViewById(R.id.movie_premiere_date_text_view);
             movieCoverView = (ImageView) itemView.findViewById(R.id.movie_cover_image_view);
         }
 

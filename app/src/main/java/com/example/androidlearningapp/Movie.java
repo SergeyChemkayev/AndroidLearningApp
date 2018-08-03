@@ -1,19 +1,12 @@
 package com.example.androidlearningapp;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Objects;
 
 public class Movie {
-    @SerializedName("image")
     private String image;
-    @SerializedName("name")
     private String name;
-    @SerializedName("name_eng")
     private String nameEng;
-    @SerializedName("premiere")
     private String premiere;
-    @SerializedName("description")
     private String description;
 
     public void setImage(String image) {

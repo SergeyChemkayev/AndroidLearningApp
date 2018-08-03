@@ -34,7 +34,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/premiere_date_text_view"
+                android:id="@+id/movie_premiere_date_text_view"
                 style="@style/TextView.Secondary"
                 android:layout_marginStart="@dimen/text_small_margin"
                 android:ellipsize="end"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/description_text_view"
+                android:id="@+id/movie_description_text_view"
                 style="@style/TextView.Primary"
                 android:layout_marginTop="@dimen/text_small_margin" />
         </LinearLayout>
