@@ -7,4 +7,5 @@
     <dimen name="button_margin_top">16dp</dimen>
     <dimen name="button_margin_start">16dp</dimen>
     <dimen name="text_small_margin">5dp</dimen>
+    <dimen name="progress_bar_margin">72dp</dimen>
 </resources>

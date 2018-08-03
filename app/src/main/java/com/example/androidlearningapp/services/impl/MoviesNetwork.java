@@ -18,10 +18,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MoviesNetwork implements MoviesRemoteSource {
     private static final String BASE_URL = "http://www.mocky.io/v2/";
-    private MoviesApi moviesApi;
     private static volatile MoviesRemoteSource INSTANCE = null;
-
+    private MoviesApi moviesApi;
     private GetMoviesListener getMoviesListener;
+
+    public static MoviesRemoteSource getInstance() {
+        MoviesRemoteSource moviesRemoteSource = INSTANCE;
+        if (moviesRemoteSource == null) {
+            synchronized (MoviesNetwork.class) {
+                moviesRemoteSource = INSTANCE;
+                if (moviesRemoteSource == null) {
+                    INSTANCE = moviesRemoteSource = new MoviesNetwork();
+                }
+            }
+        }
+        return moviesRemoteSource;
+    }
 
     private MoviesNetwork() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -62,16 +74,5 @@ public class MoviesNetwork implements MoviesRemoteSource {
         });
     }
 
-    public static MoviesRemoteSource getInstance() {
-        MoviesRemoteSource moviesRemoteSource = INSTANCE;
-        if (moviesRemoteSource == null) {
-            synchronized (MoviesNetwork.class) {
-                moviesRemoteSource = INSTANCE;
-                if (moviesRemoteSource == null) {
-                    INSTANCE = moviesRemoteSource = new MoviesNetwork();
-                }
-            }
-        }
-        return moviesRemoteSource;
-    }
+
 }

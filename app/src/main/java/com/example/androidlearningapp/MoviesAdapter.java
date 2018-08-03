@@ -65,11 +65,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             nameEngView.setText(movie.getNameEng());
             descriptionView.setText(movie.getDescription());
             premiereDateView.setText(movie.getPremiere());
-            RequestOptions options = new RequestOptions();
-            options.centerCrop();
             Glide.with(itemView.getContext())
                     .load(movie.getImage())
-                    .apply(options)
+                    .apply(new RequestOptions().centerCrop())
                     .into(movieCoverView);
         }
     }
