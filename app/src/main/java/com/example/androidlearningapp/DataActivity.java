@@ -40,10 +40,10 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 getMovies();
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright,
-                R.color.holo_green_light,
-                R.color.holo_orange_light,
-                R.color.holo_red_light);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         adapter = new MoviesAdapter();
         recyclerView.setAdapter(adapter);
         getMovies();
