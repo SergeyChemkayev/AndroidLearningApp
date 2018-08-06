@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/my_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/data_movies_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+    <ProgressBar
+        android:id="@+id/data_loading_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/data_empty_view"
+        style="@style/TextView.Primary.Bold"
+        android:layout_gravity="center"
+        android:text="@string/no_data_message"
+        android:visibility="gone" />
+</FrameLayout>
