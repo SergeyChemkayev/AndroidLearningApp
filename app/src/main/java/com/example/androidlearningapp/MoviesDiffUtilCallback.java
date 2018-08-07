@@ -25,11 +25,11 @@ public class MoviesDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).getName().equals(newList.get(newItemPosition).getName());
+        return newList.get(newItemPosition) != null && oldList.get(oldItemPosition) != null && oldList.get(oldItemPosition).getName().equals(newList.get(newItemPosition).getName());
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        return newList.get(newItemPosition) != null && oldList.get(oldItemPosition) != null && oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
     }
 }
