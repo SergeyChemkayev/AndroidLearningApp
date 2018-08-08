@@ -1,6 +1,6 @@
 package com.example.androidlearningapp.listeners;
 
-import com.example.androidlearningapp.Movie;
+import com.example.androidlearningapp.movieitems.Movie;
 
 import java.util.List;
 

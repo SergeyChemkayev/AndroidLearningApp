@@ -12,13 +12,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.listeners.GetMoviesListener;
-import com.example.androidlearningapp.listeners.OnLoadMoreListener;
+import com.example.androidlearningapp.movieitems.Movie;
+import com.example.androidlearningapp.movieitems.MovieListElement;
 import com.example.androidlearningapp.services.MoviesRemoteSource;
 import com.example.androidlearningapp.services.impl.MoviesNetwork;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnLoadMoreListener {
+public class DataActivity extends AppCompatActivity implements GetMoviesListener {
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
@@ -49,7 +51,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         swipeRefreshLayout.setRefreshing(true);
-        adapter = new MoviesAdapter(this);
+        adapter = new MoviesAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -59,6 +61,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 if (linearLayoutManager != null) {
                     if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
                         adapter.showLoading();
+                        getMovies();
                     }
                 }
             }
@@ -82,15 +85,20 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesSuccess(List<Movie> movies) {
         if (movies == null || movies.isEmpty()) {
             if (adapter.getItemCount() == 0) {
+                adapter.stopLoadMovies(true);
                 setViewsVisibility(true);
             } else {
-                adapter.setMoreLoading(true);
+                adapter.stopLoadMovies(true);
                 setViewsVisibility(false);
             }
         } else {
-            adapter.setMoreLoading(true);
             setViewsVisibility(false);
-            adapter.addAll(movies);
+            List<MovieListElement> list = new ArrayList<>();
+            list.addAll(movies);
+            adapter.addMovies(list);
+            if (movies.size() < 7) {
+                adapter.stopLoadMovies(true);
+            }
         }
     }
 
@@ -98,11 +106,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesError(Throwable error) {
         setViewsVisibility(true);
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLoadMore() {
-        getMovies();
     }
 
     private void setViewsVisibility(boolean isMoviesEmpty) {

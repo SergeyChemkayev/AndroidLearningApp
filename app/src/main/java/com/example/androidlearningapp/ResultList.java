@@ -1,6 +1,6 @@
 package com.example.androidlearningapp;
 
-import com.google.gson.annotations.SerializedName;
+import com.example.androidlearningapp.movieitems.Movie;
 
 import java.util.List;
 
