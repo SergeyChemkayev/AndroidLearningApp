@@ -2,8 +2,8 @@ package com.example.androidlearningapp.movieitems;
 
 import java.util.Objects;
 
-public class Movie implements MovieListElement {
-    private static final String TYPE= "MOVIE";
+public class Movie implements MovieElement {
+    private static final int TYPE= 1;
     private String image;
     private String name;
     private String nameEng;
@@ -51,7 +51,7 @@ public class Movie implements MovieListElement {
     }
 
     @Override
-    public String getType() {
+    public int getType() {
         return TYPE;
     }
 

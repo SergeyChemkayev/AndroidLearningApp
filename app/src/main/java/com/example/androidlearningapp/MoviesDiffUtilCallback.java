@@ -2,15 +2,15 @@ package com.example.androidlearningapp;
 
 import android.support.v7.util.DiffUtil;
 
-import com.example.androidlearningapp.movieitems.MovieListElement;
+import com.example.androidlearningapp.movieitems.MovieElement;
 
 import java.util.List;
 
 public class MoviesDiffUtilCallback extends DiffUtil.Callback {
-    private final List<MovieListElement> oldList;
-    private final List<MovieListElement> newList;
+    private final List<MovieElement> oldList;
+    private final List<MovieElement> newList;
 
-    public MoviesDiffUtilCallback(List<MovieListElement> oldList, List<MovieListElement> newList) {
+    public MoviesDiffUtilCallback(List<MovieElement> oldList, List<MovieElement> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }

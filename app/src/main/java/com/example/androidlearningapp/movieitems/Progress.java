@@ -1,10 +1,10 @@
 package com.example.androidlearningapp.movieitems;
 
-public class Progress implements MovieListElement {
-    private static final String TYPE = "PROGRESS";
+public class Progress implements MovieElement {
+    private static final int TYPE = 0;
 
     @Override
-    public String getType() {
+    public int getType() {
         return TYPE;
     }
 

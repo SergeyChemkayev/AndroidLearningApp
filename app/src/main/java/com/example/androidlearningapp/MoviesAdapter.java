@@ -14,17 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.movieitems.Movie;
-import com.example.androidlearningapp.movieitems.MovieListElement;
+import com.example.androidlearningapp.movieitems.MovieElement;
 import com.example.androidlearningapp.movieitems.Progress;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<MovieListElement> moviesList;
+public class MoviesAdapter extends RecyclerView.Adapter<BindViewHolder> {
+    private List<MovieElement> moviesList;
     private static final int VIEW_MOVIE = 1;
-    private static final int VIEW_PROGRESS = 0;
-    private boolean isNoMoreLoading;
 
     MoviesAdapter() {
         moviesList = new ArrayList<>();
@@ -32,60 +30,56 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return moviesList.get(position).getType().equals("MOVIE") ? VIEW_MOVIE : VIEW_PROGRESS;
+        return moviesList.get(position).getType();
     }
 
-    public void addMovies(List<MovieListElement> list) {
-        if (list != null) {
-            List<MovieListElement> tmp = new ArrayList<>(moviesList);
+    public void setMovies(List<MovieElement> list) {
+        if(list==null){
+            throw new NullPointerException("list must be not null");
+        }
+            dispatchUpdates(list);
+    }
+
+    public void addMovies(List<MovieElement> list) {
+        if (list==null){
+            throw new NullPointerException("list must be not null");
+        }
+            List<MovieElement> tmp = new ArrayList<>(moviesList);
             tmp.addAll(list);
             dispatchUpdates(tmp);
-        }
-        isNoMoreLoading = false;
     }
 
     @NonNull
     @Override
-    public AbstractViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == VIEW_MOVIE) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View movieItemView = inflater.inflate(R.layout.movie_item, parent, false);
-            return new MovieViewHolder(movieItemView);
+            return new MovieViewHolder(inflater.inflate(R.layout.movie_item, parent, false));
         } else {
-            return new ProgressViewHolder(LayoutInflater.from(context).inflate(R.layout.loading_item, parent, false));
+            return new ProgressViewHolder(inflater.inflate(R.layout.loading_item, parent, false));
         }
     }
 
     public void showLoading() {
-        if (!isNoMoreLoading && moviesList != null) {
-            isNoMoreLoading = true;
-            List<MovieListElement> list = new ArrayList<>(moviesList);
+        if (moviesList != null) {
+            List<MovieElement> list = new ArrayList<>(moviesList);
             list.add(new Progress());
             dispatchUpdates(list);
         }
     }
 
-    public void stopLoadMovies(boolean isStop) {
-        isNoMoreLoading = isStop;
-    }
-
     public void dismissLoading() {
         if (moviesList != null && moviesList.size() > 0) {
-            List<MovieListElement> list = new ArrayList<>(moviesList);
+            List<MovieElement> list = new ArrayList<>(moviesList);
             list.remove(moviesList.size() - 1);
             dispatchUpdates(list);
         }
     }
 
-    public void clear() {
-        dispatchUpdates(new ArrayList<MovieListElement>());
-    }
-
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AbstractViewHolder movieViewHolder = (AbstractViewHolder) holder;
-        movieViewHolder.bind(moviesList.get(position));
+    public void onBindViewHolder(@NonNull BindViewHolder holder, int position) {
+        holder.bind(moviesList.get(position));
     }
 
     @Override
@@ -93,14 +87,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return moviesList == null ? 0 : moviesList.size();
     }
 
-    private void dispatchUpdates(List<MovieListElement> newList) {
+    private void dispatchUpdates(List<MovieElement> newList) {
         MoviesDiffUtilCallback moviesDiffUtilCallback = new MoviesDiffUtilCallback(moviesList, newList);
         DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(moviesDiffUtilCallback);
         moviesList = newList;
         itemsDiffResult.dispatchUpdatesTo(this);
     }
 
-    public static class MovieViewHolder extends AbstractViewHolder {
+    public static class MovieViewHolder extends BindViewHolder {
         private TextView nameView;
         private TextView nameEngView;
         private TextView descriptionView;
@@ -116,8 +110,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             movieCoverView = (ImageView) itemView.findViewById(R.id.movie_cover_image_view);
         }
 
-        public void bind(MovieListElement movieListElement) {
-            Movie movie = (Movie) movieListElement;
+        public void bind(MovieElement movieElement) {
+            Movie movie = (Movie) movieElement;
             nameView.setText(movie.getName());
             nameEngView.setText(movie.getNameEng());
             descriptionView.setText(movie.getDescription());
@@ -129,7 +123,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public static class ProgressViewHolder extends AbstractViewHolder {
+    public static class ProgressViewHolder extends BindViewHolder {
         private ProgressBar progressBar;
 
         ProgressViewHolder(View v) {
@@ -138,7 +132,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         @Override
-        public void bind(MovieListElement movieListElement) {
+        public void bind(MovieElement movieElement) {
             // nothing to do :(
         }
     }

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.androidlearningapp.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movieitems.Movie;
-import com.example.androidlearningapp.movieitems.MovieListElement;
+import com.example.androidlearningapp.movieitems.MovieElement;
 import com.example.androidlearningapp.services.MoviesRemoteSource;
 import com.example.androidlearningapp.services.impl.MoviesNetwork;
 
@@ -26,6 +26,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
+    private boolean isNoMoreMoviesLoading;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -42,7 +43,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                adapter.clear();
                 getMovies();
             }
         });
@@ -59,9 +59,12 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (linearLayoutManager != null) {
-                    if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
-                        adapter.showLoading();
-                        getMovies();
+                    if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 1)) {
+                        if (!isNoMoreMoviesLoading) {
+                            adapter.showLoading();
+                            isNoMoreMoviesLoading = true;
+                            getMovies();
+                        }
                     }
                 }
             }
@@ -85,19 +88,29 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesSuccess(List<Movie> movies) {
         if (movies == null || movies.isEmpty()) {
             if (adapter.getItemCount() == 0) {
-                adapter.stopLoadMovies(true);
+                isNoMoreMoviesLoading = true;
                 setViewsVisibility(true);
+                adapter.dismissLoading();
+
             } else {
-                adapter.stopLoadMovies(true);
+                isNoMoreMoviesLoading = true;
                 setViewsVisibility(false);
+                adapter.dismissLoading();
+
             }
         } else {
-            setViewsVisibility(false);
-            List<MovieListElement> list = new ArrayList<>();
+            isNoMoreMoviesLoading = false;
+            List<MovieElement> list = new ArrayList<>();
             list.addAll(movies);
-            adapter.addMovies(list);
+            if (swipeRefreshLayout.isRefreshing()) {
+                adapter.setMovies(list);
+            } else {
+                adapter.dismissLoading();
+                adapter.addMovies(list);
+            }
+            setViewsVisibility(false);
             if (movies.size() < 7) {
-                adapter.stopLoadMovies(true);
+                isNoMoreMoviesLoading = true;
             }
         }
     }
@@ -109,7 +122,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void setViewsVisibility(boolean isMoviesEmpty) {
-        adapter.dismissLoading();
         swipeRefreshLayout.setRefreshing(false);
         if (isMoviesEmpty) {
             recyclerView.setVisibility(View.GONE);

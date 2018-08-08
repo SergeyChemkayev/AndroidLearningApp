@@ -1,6 +1,6 @@
 package com.example.androidlearningapp.movieitems;
 
-public interface MovieListElement {
-    String getType();
+public interface MovieElement {
+    int getType();
     String getName();
 }
