@@ -20,38 +20,34 @@ import com.example.androidlearningapp.movieitems.Progress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<BindViewHolder> {
-    private List<MovieElement> moviesList;
+public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHolder> {
+    private List<MovieElement> movies;
     private static final int VIEW_MOVIE = 1;
-
-    MoviesAdapter() {
-        moviesList = new ArrayList<>();
-    }
-
+    
     @Override
     public int getItemViewType(int position) {
-        return moviesList.get(position).getType();
+        return movies.get(position).getType();
     }
 
     public void setMovies(List<MovieElement> list) {
-        if(list==null){
-            throw new NullPointerException("list must be not null");
+        if (list == null) {
+            list = new ArrayList<>();
         }
-            dispatchUpdates(list);
+        dispatchUpdates(list);
     }
 
     public void addMovies(List<MovieElement> list) {
-        if (list==null){
-            throw new NullPointerException("list must be not null");
+        if (list == null) {
+            list = new ArrayList<>();
         }
-            List<MovieElement> tmp = new ArrayList<>(moviesList);
-            tmp.addAll(list);
-            dispatchUpdates(tmp);
+        List<MovieElement> tmp = new ArrayList<>(movies);
+        tmp.addAll(list);
+        dispatchUpdates(tmp);
     }
 
     @NonNull
     @Override
-    public BindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieElementBindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == VIEW_MOVIE) {
@@ -62,39 +58,42 @@ public class MoviesAdapter extends RecyclerView.Adapter<BindViewHolder> {
     }
 
     public void showLoading() {
-        if (moviesList != null) {
-            List<MovieElement> list = new ArrayList<>(moviesList);
+        if (movies != null && movies.get(movies.size() - 1).getType() == 1) {
+            List<MovieElement> list = new ArrayList<>(movies);
             list.add(new Progress());
             dispatchUpdates(list);
         }
     }
 
     public void dismissLoading() {
-        if (moviesList != null && moviesList.size() > 0) {
-            List<MovieElement> list = new ArrayList<>(moviesList);
-            list.remove(moviesList.size() - 1);
-            dispatchUpdates(list);
+        if (movies != null) {
+            int size = movies.size();
+            if (size > 0 && movies.get(size - 1).getType() == 0) {
+                List<MovieElement> list = new ArrayList<>(movies);
+                list.remove(movies.size() - 1);
+                dispatchUpdates(list);
+            }
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BindViewHolder holder, int position) {
-        holder.bind(moviesList.get(position));
+    public void onBindViewHolder(@NonNull MovieElementBindViewHolder holder, int position) {
+        holder.bind(movies.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return moviesList == null ? 0 : moviesList.size();
+        return movies == null ? 0 : movies.size();
     }
 
     private void dispatchUpdates(List<MovieElement> newList) {
-        MoviesDiffUtilCallback moviesDiffUtilCallback = new MoviesDiffUtilCallback(moviesList, newList);
+        MoviesDiffUtilCallback moviesDiffUtilCallback = new MoviesDiffUtilCallback(movies, newList);
         DiffUtil.DiffResult itemsDiffResult = DiffUtil.calculateDiff(moviesDiffUtilCallback);
-        moviesList = newList;
+        movies = newList;
         itemsDiffResult.dispatchUpdatesTo(this);
     }
 
-    public static class MovieViewHolder extends BindViewHolder {
+    public static class MovieViewHolder extends MovieElementBindViewHolder {
         private TextView nameView;
         private TextView nameEngView;
         private TextView descriptionView;
@@ -123,7 +122,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<BindViewHolder> {
         }
     }
 
-    public static class ProgressViewHolder extends BindViewHolder {
+    public static class ProgressViewHolder extends MovieElementBindViewHolder {
         private ProgressBar progressBar;
 
         ProgressViewHolder(View v) {

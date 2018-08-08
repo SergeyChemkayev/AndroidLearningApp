@@ -5,8 +5,8 @@ import android.view.View;
 
 import com.example.androidlearningapp.movieitems.MovieElement;
 
-public abstract class BindViewHolder extends RecyclerView.ViewHolder {
-    BindViewHolder(View v){
+public abstract class MovieElementBindViewHolder extends RecyclerView.ViewHolder {
+    MovieElementBindViewHolder(View v){
         super(v);
     }
 
