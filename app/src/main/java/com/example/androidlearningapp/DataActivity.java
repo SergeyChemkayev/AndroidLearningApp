@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements GetMoviesListener {
+    public static final int MAX_RESPONSE_MOVIES_COUNT = 7;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
@@ -124,7 +125,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 setViewsVisibility(true);
             }
             return false;
-        } else if (movies.size() < 7) {
+        } else if (movies.size() < MAX_RESPONSE_MOVIES_COUNT) {
             isAbleToLoadMoreMovies = false;
         }
         return true;
