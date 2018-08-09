@@ -26,7 +26,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
-    private boolean isNoMoreMoviesLoading;
+    private boolean isAbleToLoadMoreMovies = true;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -60,9 +60,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (linearLayoutManager != null) {
                     if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
-                        if (!isNoMoreMoviesLoading) {
+                        if (isAbleToLoadMoreMovies) {
                             adapter.showLoading();
-                            isNoMoreMoviesLoading = true;
+                            isAbleToLoadMoreMovies = false;
                             moviesRemoteSource.getMovies();
                         }
                     }
@@ -88,18 +88,18 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesSuccess(List<Movie> movies) {
         if (movies == null || movies.isEmpty()) {
             if (adapter.getItemCount() == 0) {
-                isNoMoreMoviesLoading = true;
+                isAbleToLoadMoreMovies = false;
                 setViewsVisibility(true);
                 adapter.dismissLoading();
 
             } else {
-                isNoMoreMoviesLoading = true;
+                isAbleToLoadMoreMovies = false;
                 setViewsVisibility(false);
                 adapter.dismissLoading();
 
             }
         } else {
-            isNoMoreMoviesLoading = false;
+            isAbleToLoadMoreMovies = true;
             List<MovieElement> list = new ArrayList<>();
             list.addAll(movies);
             if (swipeRefreshLayout.isRefreshing()) {
@@ -110,7 +110,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             }
             setViewsVisibility(false);
             if (movies.size() < 7) {
-                isNoMoreMoviesLoading = true;
+                isAbleToLoadMoreMovies = false;
             }
         }
     }
