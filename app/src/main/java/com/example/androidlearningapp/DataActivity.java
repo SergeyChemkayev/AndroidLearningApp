@@ -38,22 +38,29 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
-        recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
         emptyView = (View) findViewById(R.id.data_empty_view);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.data_swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                isOnRefreshEvent = true;
-                moviesRemoteSource.getMovies();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-        swipeRefreshLayout.setRefreshing(true);
         adapter = new MoviesAdapter();
+        recyclerViewInit();
+        swipeRefreshLayoutInit();
+        swipeRefreshLayout.setRefreshing(true);
+        isOnRefreshEvent=true;
+        moviesRemoteSource.getMovies();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        moviesRemoteSource.setGetMoviesListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        moviesRemoteSource.setGetMoviesListener(null);
+    }
+
+    private void recyclerViewInit() {
+        recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -71,19 +78,21 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 }
             }
         });
-        moviesRemoteSource.getMovies();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        moviesRemoteSource.setGetMoviesListener(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        moviesRemoteSource.setGetMoviesListener(null);
+    private void swipeRefreshLayoutInit() {
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.data_swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isOnRefreshEvent = true;
+                moviesRemoteSource.getMovies();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     @Override
