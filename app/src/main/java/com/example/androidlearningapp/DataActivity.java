@@ -27,6 +27,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMoreMovies = true;
+    private boolean isOnRefreshEvent;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -43,6 +44,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isOnRefreshEvent = true;
                 moviesRemoteSource.getMovies();
             }
         });
@@ -86,31 +88,14 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
 
     @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
-        if (movies == null || movies.isEmpty()) {
-            if (adapter.getItemCount() == 0) {
-                isAbleToLoadMoreMovies = false;
-                setViewsVisibility(true);
-                adapter.dismissLoading();
-
-            } else {
-                isAbleToLoadMoreMovies = false;
-                setViewsVisibility(false);
-                adapter.dismissLoading();
-
-            }
-        } else {
-            isAbleToLoadMoreMovies = true;
+        if (isAbleToAddMovies(movies)) {
             List<MovieElement> list = new ArrayList<>();
             list.addAll(movies);
-            if (swipeRefreshLayout.isRefreshing()) {
+            if (isOnRefreshEvent) {
+                isOnRefreshEvent = false;
                 adapter.setMovies(list);
             } else {
-                adapter.dismissLoading();
                 adapter.addMovies(list);
-            }
-            setViewsVisibility(false);
-            if (movies.size() < 7) {
-                isAbleToLoadMoreMovies = false;
             }
         }
     }
@@ -121,8 +106,24 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
+    private boolean isAbleToAddMovies(List<Movie> movies) {
+        setViewsVisibility(false);
+        isAbleToLoadMoreMovies = true;
+        if (movies == null || movies.isEmpty()) {
+            isAbleToLoadMoreMovies = false;
+            if (adapter.getItemCount() == 0) {
+                setViewsVisibility(true);
+            }
+            return false;
+        } else if (movies.size() < 7) {
+            isAbleToLoadMoreMovies = false;
+        }
+        return true;
+    }
+
     private void setViewsVisibility(boolean isMoviesEmpty) {
         swipeRefreshLayout.setRefreshing(false);
+        adapter.dismissLoading();
         if (isMoviesEmpty) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
