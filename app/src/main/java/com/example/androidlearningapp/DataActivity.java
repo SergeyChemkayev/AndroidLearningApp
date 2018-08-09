@@ -43,7 +43,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMovies();
+                moviesRemoteSource.getMovies();
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -59,17 +59,17 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (linearLayoutManager != null) {
-                    if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 1)) {
+                    if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
                         if (!isNoMoreMoviesLoading) {
                             adapter.showLoading();
                             isNoMoreMoviesLoading = true;
-                            getMovies();
+                            moviesRemoteSource.getMovies();
                         }
                     }
                 }
             }
         });
-        getMovies();
+        moviesRemoteSource.getMovies();
     }
 
     @Override
@@ -130,9 +130,5 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             recyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
-    }
-
-    private void getMovies() {
-        moviesRemoteSource.getMovies();
     }
 }
