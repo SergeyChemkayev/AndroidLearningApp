@@ -44,7 +44,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         recyclerViewInit();
         swipeRefreshLayoutInit();
         swipeRefreshLayout.setRefreshing(true);
-        isOnRefreshEvent=true;
+        isOnRefreshEvent = true;
         moviesRemoteSource.getMovies();
     }
 
@@ -86,8 +86,11 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                isOnRefreshEvent = true;
-                moviesRemoteSource.getMovies();
+                if (isAbleToLoadMoreMovies) {
+                    isAbleToLoadMoreMovies = false;
+                    isOnRefreshEvent = true;
+                    moviesRemoteSource.getMovies();
+                }
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
