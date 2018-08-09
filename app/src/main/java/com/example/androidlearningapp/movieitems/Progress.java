@@ -2,6 +2,7 @@ package com.example.androidlearningapp.movieitems;
 
 public class Progress implements MovieElement {
     public static final int TYPE = 0;
+    public static final String ID = "PROGRESS_ID_FILLER";
 
     @Override
     public int getType() {
@@ -9,7 +10,7 @@ public class Progress implements MovieElement {
     }
 
     @Override
-    public String getName() { //method must be in interface, but there is nothing to return
-        return null;
+    public String getId() {
+        return ID;
     }
 }

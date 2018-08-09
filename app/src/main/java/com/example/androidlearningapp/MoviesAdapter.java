@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -110,7 +109,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
 
         public void bind(MovieElement movieElement) {
             Movie movie = (Movie) movieElement;
-            nameView.setText(movie.getName());
+            nameView.setText(movie.getId());
             nameEngView.setText(movie.getNameEng());
             descriptionView.setText(movie.getDescription());
             premiereDateView.setText(movie.getPremiere());
@@ -122,11 +121,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
     }
 
     public static class ProgressViewHolder extends MovieElementViewHolder {
-        private ProgressBar progressBar;
 
         ProgressViewHolder(View v) {
             super(v);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.item_load_progress_ber);
         }
 
         @Override
