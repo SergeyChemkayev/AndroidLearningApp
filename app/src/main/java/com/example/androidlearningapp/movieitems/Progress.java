@@ -1,7 +1,7 @@
 package com.example.androidlearningapp.movieitems;
 
 public class Progress implements MovieElement {
-    private static final int TYPE = 0;
+    public static final int TYPE = 0;
 
     @Override
     public int getType() {

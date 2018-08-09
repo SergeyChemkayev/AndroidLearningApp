@@ -20,10 +20,9 @@ import com.example.androidlearningapp.movieitems.Progress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> {
     private List<MovieElement> movies;
-    private static final int VIEW_MOVIE = 1;
-    
+
     @Override
     public int getItemViewType(int position) {
         return movies.get(position).getType();
@@ -47,10 +46,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
 
     @NonNull
     @Override
-    public MovieElementBindViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MovieElementViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (viewType == VIEW_MOVIE) {
+        if (viewType == Movie.TYPE) {
             return new MovieViewHolder(inflater.inflate(R.layout.movie_item, parent, false));
         } else {
             return new ProgressViewHolder(inflater.inflate(R.layout.loading_item, parent, false));
@@ -58,7 +57,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
     }
 
     public void showLoading() {
-        if (movies != null && movies.get(movies.size() - 1).getType() == 1) {
+        if (movies != null && movies.get(movies.size() - 1).getType() == Movie.TYPE) {
             List<MovieElement> list = new ArrayList<>(movies);
             list.add(new Progress());
             dispatchUpdates(list);
@@ -68,7 +67,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
     public void dismissLoading() {
         if (movies != null) {
             int size = movies.size();
-            if (size > 0 && movies.get(size - 1).getType() == 0) {
+            if (size > 0 && movies.get(size - 1).getType() == Progress.TYPE) {
                 List<MovieElement> list = new ArrayList<>(movies);
                 list.remove(movies.size() - 1);
                 dispatchUpdates(list);
@@ -77,7 +76,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieElementBindViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieElementViewHolder holder, int position) {
         holder.bind(movies.get(position));
     }
 
@@ -93,7 +92,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
         itemsDiffResult.dispatchUpdatesTo(this);
     }
 
-    public static class MovieViewHolder extends MovieElementBindViewHolder {
+    public static class MovieViewHolder extends MovieElementViewHolder {
         private TextView nameView;
         private TextView nameEngView;
         private TextView descriptionView;
@@ -122,7 +121,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementBindViewHold
         }
     }
 
-    public static class ProgressViewHolder extends MovieElementBindViewHolder {
+    public static class ProgressViewHolder extends MovieElementViewHolder {
         private ProgressBar progressBar;
 
         ProgressViewHolder(View v) {

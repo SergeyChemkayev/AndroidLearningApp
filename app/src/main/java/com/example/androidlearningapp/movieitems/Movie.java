@@ -3,7 +3,7 @@ package com.example.androidlearningapp.movieitems;
 import java.util.Objects;
 
 public class Movie implements MovieElement {
-    private static final int TYPE= 1;
+    public static final int TYPE= 1;
     private String image;
     private String name;
     private String nameEng;
