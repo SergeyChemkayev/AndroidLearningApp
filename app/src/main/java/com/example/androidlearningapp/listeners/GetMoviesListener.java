@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface GetMoviesListener {
     void onGetMoviesSuccess(List<Movie> movies);
+
     void onGetMoviesError(Throwable error);
 }

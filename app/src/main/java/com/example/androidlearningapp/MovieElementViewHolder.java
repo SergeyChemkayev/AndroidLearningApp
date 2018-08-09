@@ -6,7 +6,7 @@ import android.view.View;
 import com.example.androidlearningapp.movieitems.MovieElement;
 
 public abstract class MovieElementViewHolder extends RecyclerView.ViewHolder {
-    MovieElementViewHolder(View v){
+    MovieElementViewHolder(View v) {
         super(v);
     }
 
