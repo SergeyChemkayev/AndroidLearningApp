@@ -56,7 +56,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
     }
 
     public void showLoading() {
-        if (movies != null && movies.get(movies.size() - 1).getType() == Movie.TYPE) {
+        if (isLastItemWithType(Movie.TYPE)) {
             List<MovieElement> list = new ArrayList<>(movies);
             list.add(new Progress());
             dispatchUpdates(list);
@@ -64,13 +64,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
     }
 
     public void dismissLoading() {
+        if (isLastItemWithType(Progress.TYPE)) {
+            List<MovieElement> list = new ArrayList<>(movies);
+            list.remove(movies.size() - 1);
+            dispatchUpdates(list);
+        }
+    }
+
+    private boolean isLastItemWithType(int type) {
         if (movies != null) {
             int size = movies.size();
-            if (size > 0 && movies.get(size - 1).getType() == Progress.TYPE) {
-                List<MovieElement> list = new ArrayList<>(movies);
-                list.remove(movies.size() - 1);
-                dispatchUpdates(list);
-            }
+            return size > 0 && movies.get(size - 1).getType() == type;
+        } else {
+            return false;
         }
     }
 
