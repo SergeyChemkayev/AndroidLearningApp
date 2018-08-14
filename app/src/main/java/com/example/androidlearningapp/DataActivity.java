@@ -21,14 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements GetMoviesListener {
-    public static final int MAX_RESPONSE_MOVIES_COUNT = 7;
+    public static final int MOVIES_PER_PAGE = 7;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
-    private boolean isAbleToLoadMoreMovies = true;
-    private boolean isOnRefreshEvent;
+    private boolean isAbleToLoadMovies = true;
+    private boolean isOnRefresh;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -41,10 +41,10 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         setContentView(R.layout.activity_data);
         emptyView = (View) findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
-        recyclerViewInit();
-        swipeRefreshLayoutInit();
+        initRecyclerView();
+        initSwipeRefreshLayout();
         swipeRefreshLayout.setRefreshing(true);
-        isOnRefreshEvent = true;
+        isOnRefresh = true;
         moviesRemoteSource.getMovies();
     }
 
@@ -60,7 +60,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         moviesRemoteSource.setGetMoviesListener(null);
     }
 
-    private void recyclerViewInit() {
+    private void initRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -70,9 +70,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (linearLayoutManager != null) {
                     if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
-                        if (isAbleToLoadMoreMovies) {
+                        if (isAbleToLoadMovies) {
                             adapter.showLoading();
-                            isAbleToLoadMoreMovies = false;
+                            isAbleToLoadMovies = false;
                             moviesRemoteSource.getMovies();
                         }
                     }
@@ -81,14 +81,14 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         });
     }
 
-    private void swipeRefreshLayoutInit() {
+    private void initSwipeRefreshLayout() {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.data_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (isAbleToLoadMoreMovies) {
-                    isAbleToLoadMoreMovies = false;
-                    isOnRefreshEvent = true;
+                if (isAbleToLoadMovies) {
+                    isAbleToLoadMovies = false;
+                    isOnRefresh = true;
                     moviesRemoteSource.getMovies();
                 }
             }
@@ -101,40 +101,37 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
 
     @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
-        if (isAbleToAddMovies(movies)) {
-            List<MovieElement> list = new ArrayList<>();
-            list.addAll(movies);
-            if (isOnRefreshEvent) {
-                isOnRefreshEvent = false;
-                adapter.setMovies(list);
-            } else {
-                adapter.addMovies(list);
-            }
+        setLoadMoviesPermit(movies);
+        List<MovieElement> list = new ArrayList<>();
+        list.addAll(movies);
+        if (isOnRefresh) {
+            isOnRefresh = false;
+            adapter.setMovies(list);
+        } else {
+            adapter.addMovies(list);
         }
     }
 
     @Override
     public void onGetMoviesError(Throwable error) {
-        setViewsVisibility(true);
+        updateUiAfterLoading(true);
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isAbleToAddMovies(List<Movie> movies) {
-        setViewsVisibility(false);
-        isAbleToLoadMoreMovies = true;
+    private void setLoadMoviesPermit(List<Movie> movies) {
+        updateUiAfterLoading(false);
+        isAbleToLoadMovies = true;
         if (movies == null || movies.isEmpty()) {
-            isAbleToLoadMoreMovies = false;
+            isAbleToLoadMovies = false;
             if (adapter.getItemCount() == 0) {
-                setViewsVisibility(true);
+                updateUiAfterLoading(true);
             }
-            return false;
-        } else if (movies.size() < MAX_RESPONSE_MOVIES_COUNT) {
-            isAbleToLoadMoreMovies = false;
+        } else if (movies.size() < MOVIES_PER_PAGE) {
+            isAbleToLoadMovies = false;
         }
-        return true;
     }
 
-    private void setViewsVisibility(boolean isMoviesEmpty) {
+    private void updateUiAfterLoading(boolean isMoviesEmpty) {
         swipeRefreshLayout.setRefreshing(false);
         adapter.dismissLoading();
         if (isMoviesEmpty) {
