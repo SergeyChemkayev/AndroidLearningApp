@@ -67,18 +67,18 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (linearLayoutManager != null) {
-                    if (dy > 0 && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2)) {
-                        if (isAbleToLoadMovies) {
-                            adapter.showLoading();
-                            isAbleToLoadMovies = false;
-                            moviesRemoteSource.getMovies();
-                        }
-                    }
+                if (dy > 0 && isAbleToAddMovies()) {
+                    adapter.showLoading();
+                    isAbleToLoadMovies = false;
+                    moviesRemoteSource.getMovies();
                 }
             }
         });
+    }
+
+    private boolean isAbleToAddMovies() {
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        return linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 2) && isAbleToLoadMovies;
     }
 
     private void initSwipeRefreshLayout() {
