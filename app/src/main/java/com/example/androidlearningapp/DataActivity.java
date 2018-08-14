@@ -39,7 +39,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
-        emptyView = (View) findViewById(R.id.data_empty_view);
+        emptyView = findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
         initRecyclerView();
         initSwipeRefreshLayout();
@@ -61,7 +61,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void initRecyclerView() {
-        recyclerView = (RecyclerView) findViewById(R.id.data_movies_recycler_view);
+        recyclerView = findViewById(R.id.data_movies_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -82,7 +82,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void initSwipeRefreshLayout() {
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.data_swipe_refresh_layout);
+        swipeRefreshLayout = findViewById(R.id.data_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (Button) findViewById(R.id.main_open_data_activity_button);
+        button = findViewById(R.id.main_open_data_activity_button);
         button.setOnClickListener(this);
     }
 

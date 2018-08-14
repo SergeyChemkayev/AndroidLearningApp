@@ -106,11 +106,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
 
         public MovieViewHolder(View v) {
             super(v);
-            nameView = (TextView) itemView.findViewById(R.id.movie_name_text_view);
-            nameEngView = (TextView) itemView.findViewById(R.id.movie_name_eng_text_view);
-            descriptionView = (TextView) itemView.findViewById(R.id.movie_description_text_view);
-            premiereDateView = (TextView) itemView.findViewById(R.id.movie_premiere_date_text_view);
-            movieCoverView = (ImageView) itemView.findViewById(R.id.movie_cover_image_view);
+            nameView = itemView.findViewById(R.id.movie_name_text_view);
+            nameEngView = itemView.findViewById(R.id.movie_name_eng_text_view);
+            descriptionView = itemView.findViewById(R.id.movie_description_text_view);
+            premiereDateView = itemView.findViewById(R.id.movie_premiere_date_text_view);
+            movieCoverView = itemView.findViewById(R.id.movie_cover_image_view);
         }
 
         public void bind(MovieElement movieElement) {
