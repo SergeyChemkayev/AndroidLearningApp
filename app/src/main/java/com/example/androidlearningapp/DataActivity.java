@@ -28,7 +28,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
-    private boolean isOnRefresh;
+    private int pageNumber;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -43,9 +43,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         adapter = new MoviesAdapter();
         initRecyclerView();
         initSwipeRefreshLayout();
-        swipeRefreshLayout.setRefreshing(true);
-        isOnRefresh = true;
-        moviesRemoteSource.getMovies();
+        pageNumber = 1;
+        getMovies(pageNumber);
     }
 
     @Override
@@ -68,9 +67,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && isAbleToAddMovies()) {
-                    adapter.showLoading();
-                    isAbleToLoadMovies = false;
-                    moviesRemoteSource.getMovies();
+                    pageNumber++;
+                    getMovies(pageNumber);
                 }
             }
         });
@@ -87,9 +85,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             @Override
             public void onRefresh() {
                 if (isAbleToLoadMovies) {
-                    isAbleToLoadMovies = false;
-                    isOnRefresh = true;
-                    moviesRemoteSource.getMovies();
+                    pageNumber = 1;
+                    getMovies(pageNumber);
                 }
             }
         });
@@ -99,13 +96,24 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 android.R.color.holo_red_light);
     }
 
+    private void getMovies(int pageNumber) {
+        if (pageNumber == 1) {
+            swipeRefreshLayout.setRefreshing(true);
+            isAbleToLoadMovies = false;
+            moviesRemoteSource.getMovies();
+        } else {
+            adapter.showLoading();
+            isAbleToLoadMovies = false;
+            moviesRemoteSource.getMovies();
+        }
+    }
+
     @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
         setLoadMoviesPermit(movies);
         List<MovieElement> list = new ArrayList<>();
         list.addAll(movies);
-        if (isOnRefresh) {
-            isOnRefresh = false;
+        if (pageNumber == 1) {
             adapter.setMovies(list);
         } else {
             adapter.addMovies(list);
