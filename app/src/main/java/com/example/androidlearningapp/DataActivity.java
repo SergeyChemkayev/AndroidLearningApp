@@ -28,7 +28,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
-    private int pageNumber;
+    private int pageNumber = 1;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -43,7 +43,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         adapter = new MoviesAdapter();
         initRecyclerView();
         initSwipeRefreshLayout();
-        pageNumber = 1;
         getMovies(pageNumber);
     }
 
@@ -67,8 +66,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && isAbleToAddMovies()) {
-                    pageNumber++;
-                    getMovies(pageNumber);
+                    getMovies(pageNumber + 1);
                 }
             }
         });
@@ -85,8 +83,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             @Override
             public void onRefresh() {
                 if (isAbleToLoadMovies) {
-                    pageNumber = 1;
-                    getMovies(pageNumber);
+                    getMovies(1);
                 }
             }
         });
@@ -97,15 +94,14 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void getMovies(int pageNumber) {
+        this.pageNumber = pageNumber;
+        isAbleToLoadMovies = false;
         if (pageNumber == 1) {
             swipeRefreshLayout.setRefreshing(true);
-            isAbleToLoadMovies = false;
-            moviesRemoteSource.getMovies();
         } else {
             adapter.showLoading();
-            isAbleToLoadMovies = false;
-            moviesRemoteSource.getMovies();
         }
+        moviesRemoteSource.getMovies();
     }
 
     @Override
@@ -127,15 +123,19 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     private void setLoadMoviesPermit(List<Movie> movies) {
-        updateUiAfterLoading(false);
         isAbleToLoadMovies = true;
         if (movies == null || movies.isEmpty()) {
             isAbleToLoadMovies = false;
             if (adapter.getItemCount() == 0) {
                 updateUiAfterLoading(true);
+            } else {
+                updateUiAfterLoading(false);
             }
-        } else if (movies.size() < MOVIES_PER_PAGE) {
-            isAbleToLoadMovies = false;
+        } else {
+            updateUiAfterLoading(false);
+            if (movies.size() < MOVIES_PER_PAGE) {
+                isAbleToLoadMovies = false;
+            }
         }
     }
 
