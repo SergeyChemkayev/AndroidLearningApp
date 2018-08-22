@@ -106,7 +106,28 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
 
     @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
-        setLoadMoviesPermit(movies);
+        hideLoading();
+        isAbleToLoadMovies = movies != null && movies.size() == MOVIES_PER_PAGE;
+        addMovies(movies);
+        updateViewsVisibility();
+    }
+
+    @Override
+    public void onGetMoviesError(Throwable error) {
+        hideLoading();
+        isAbleToLoadMovies = true;
+        Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void hideLoading() {
+        if (pageNumber == 1) {
+            swipeRefreshLayout.setRefreshing(false);
+        } else {
+            adapter.dismissLoading();
+        }
+    }
+
+    private void addMovies(List<Movie> movies) {
         List<MovieElement> list = new ArrayList<>();
         list.addAll(movies);
         if (pageNumber == 1) {
@@ -116,33 +137,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         }
     }
 
-    @Override
-    public void onGetMoviesError(Throwable error) {
-        updateUiAfterLoading(true);
-        Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void setLoadMoviesPermit(List<Movie> movies) {
-        isAbleToLoadMovies = true;
-        if (movies == null || movies.isEmpty()) {
-            isAbleToLoadMovies = false;
-            if (adapter.getItemCount() == 0) {
-                updateUiAfterLoading(true);
-            } else {
-                updateUiAfterLoading(false);
-            }
-        } else {
-            updateUiAfterLoading(false);
-            if (movies.size() < MOVIES_PER_PAGE) {
-                isAbleToLoadMovies = false;
-            }
-        }
-    }
-
-    private void updateUiAfterLoading(boolean isMoviesEmpty) {
-        swipeRefreshLayout.setRefreshing(false);
-        adapter.dismissLoading();
-        if (isMoviesEmpty) {
+    private void updateViewsVisibility() {
+        if (adapter.getItemCount() == 0) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         } else {
