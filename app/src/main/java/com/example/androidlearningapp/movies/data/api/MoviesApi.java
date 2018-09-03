@@ -1,6 +1,6 @@
-package com.example.androidlearningapp.data.api;
+package com.example.androidlearningapp.movies.data.api;
 
-import com.example.androidlearningapp.entity.ResultList;
+import com.example.androidlearningapp.movies.entity.ResultList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.ui.activity;
+package com.example.androidlearningapp.movies.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

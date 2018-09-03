@@ -1,6 +1,6 @@
-package com.example.androidlearningapp.data.api.listeners;
+package com.example.androidlearningapp.movies.data.api.listeners;
 
-import com.example.androidlearningapp.entity.Movie;
+import com.example.androidlearningapp.movies.entity.Movie;
 
 import java.util.List;
 

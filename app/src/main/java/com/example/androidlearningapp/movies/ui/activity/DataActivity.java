@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.ui.activity;
+package com.example.androidlearningapp.movies.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,12 +12,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
-import com.example.androidlearningapp.data.api.listeners.GetMoviesListener;
-import com.example.androidlearningapp.entity.Movie;
-import com.example.androidlearningapp.entity.MovieElement;
-import com.example.androidlearningapp.data.api.MoviesRemoteSource;
-import com.example.androidlearningapp.data.api.MoviesNetwork;
-import com.example.androidlearningapp.ui.adapter.MoviesAdapter;
+import com.example.androidlearningapp.movies.data.api.listeners.GetMoviesListener;
+import com.example.androidlearningapp.movies.entity.Movie;
+import com.example.androidlearningapp.movies.entity.MovieElement;
+import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
+import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
+import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.entity;
+package com.example.androidlearningapp.movies.entity;
 
 public class Progress implements MovieElement {
     public static final int TYPE = 0;

@@ -1,6 +1,4 @@
-package com.example.androidlearningapp.entity;
-
-import com.example.androidlearningapp.entity.Movie;
+package com.example.androidlearningapp.movies.entity;
 
 import java.util.List;
 

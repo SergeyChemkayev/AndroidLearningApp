@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.data.api.listeners;
+package com.example.androidlearningapp.movies.data.api.listeners;
 
 public interface OnLoadMoreListener {
     void onLoadMore();

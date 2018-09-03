@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.ui.adapter;
+package com.example.androidlearningapp.movies.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
-import com.example.androidlearningapp.entity.Movie;
-import com.example.androidlearningapp.entity.MovieElement;
-import com.example.androidlearningapp.entity.Progress;
-import com.example.androidlearningapp.ui.adapter.viewholder.MovieElementViewHolder;
+import com.example.androidlearningapp.movies.entity.Movie;
+import com.example.androidlearningapp.movies.entity.MovieElement;
+import com.example.androidlearningapp.movies.entity.Progress;
+import com.example.androidlearningapp.movies.ui.adapter.viewholder.MovieElementViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
