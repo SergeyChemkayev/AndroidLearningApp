@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.data.api.services;
+package com.example.androidlearningapp.data.api;
 
 import com.example.androidlearningapp.data.api.listeners.GetMoviesListener;
 

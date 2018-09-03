@@ -15,8 +15,8 @@ import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.data.api.listeners.GetMoviesListener;
 import com.example.androidlearningapp.entity.Movie;
 import com.example.androidlearningapp.entity.MovieElement;
-import com.example.androidlearningapp.data.api.services.MoviesRemoteSource;
-import com.example.androidlearningapp.data.api.services.impl.MoviesNetwork;
+import com.example.androidlearningapp.data.api.MoviesRemoteSource;
+import com.example.androidlearningapp.data.api.MoviesNetwork;
 import com.example.androidlearningapp.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;

@@ -1,11 +1,9 @@
-package com.example.androidlearningapp.data.api.services.impl;
+package com.example.androidlearningapp.data.api;
 
 import android.support.annotation.NonNull;
 
 import com.example.androidlearningapp.data.api.listeners.GetMoviesListener;
 import com.example.androidlearningapp.entity.ResultList;
-import com.example.androidlearningapp.data.api.MoviesApi;
-import com.example.androidlearningapp.data.api.services.MoviesRemoteSource;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
