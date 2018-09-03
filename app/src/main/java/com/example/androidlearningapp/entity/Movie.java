@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.movieitems;
+package com.example.androidlearningapp.entity;
 
 import java.util.Objects;
 

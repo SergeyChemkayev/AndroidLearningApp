@@ -1,8 +1,8 @@
-package com.example.androidlearningapp;
+package com.example.androidlearningapp.ui.adapter;
 
 import android.support.v7.util.DiffUtil;
 
-import com.example.androidlearningapp.movieitems.MovieElement;
+import com.example.androidlearningapp.entity.MovieElement;
 
 import java.util.List;
 

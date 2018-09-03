@@ -1,6 +1,6 @@
-package com.example.androidlearningapp.services;
+package com.example.androidlearningapp.data.api.services;
 
-import com.example.androidlearningapp.listeners.GetMoviesListener;
+import com.example.androidlearningapp.data.api.listeners.GetMoviesListener;
 
 public interface MoviesRemoteSource {
 
