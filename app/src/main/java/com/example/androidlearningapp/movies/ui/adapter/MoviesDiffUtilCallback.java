@@ -1,14 +1,16 @@
-package com.example.androidlearningapp;
+package com.example.androidlearningapp.movies.ui.adapter;
 
 import android.support.v7.util.DiffUtil;
+
+import com.example.androidlearningapp.movies.entity.MovieElement;
 
 import java.util.List;
 
 public class MoviesDiffUtilCallback extends DiffUtil.Callback {
-    private final List<Movie> oldList;
-    private final List<Movie> newList;
+    private final List<MovieElement> oldList;
+    private final List<MovieElement> newList;
 
-    public MoviesDiffUtilCallback(List<Movie> oldList, List<Movie> newList) {
+    public MoviesDiffUtilCallback(List<MovieElement> oldList, List<MovieElement> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }
@@ -25,7 +27,7 @@ public class MoviesDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return oldList.get(oldItemPosition).getName().equals(newList.get(newItemPosition).getName());
+        return oldList.get(oldItemPosition).getId().equals(newList.get(newItemPosition).getId());
     }
 
     @Override

@@ -1,10 +1,8 @@
-package com.example.androidlearningapp;
-
-import com.google.gson.annotations.SerializedName;
+package com.example.androidlearningapp.movies.entity;
 
 import java.util.List;
 
-public class ResultList {
+public class MovieList {
     private List<Movie> list;
 
     public List<Movie> getList() {
