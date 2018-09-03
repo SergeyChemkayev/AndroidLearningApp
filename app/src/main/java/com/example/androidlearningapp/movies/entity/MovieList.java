@@ -2,7 +2,7 @@ package com.example.androidlearningapp.movies.entity;
 
 import java.util.List;
 
-public class ResultList {
+public class MovieList {
     private List<Movie> list;
 
     public List<Movie> getList() {

@@ -1,6 +1,6 @@
 package com.example.androidlearningapp.movies.entity;
 
-public class Progress implements MovieElement {
+public class MovieProgress implements MovieElement {
     public static final int TYPE = 0;
     public static final String ID = "PROGRESS_ID_FILLER";
 

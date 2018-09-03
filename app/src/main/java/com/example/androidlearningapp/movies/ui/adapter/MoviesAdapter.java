@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
-import com.example.androidlearningapp.movies.entity.Progress;
+import com.example.androidlearningapp.movies.entity.MovieProgress;
 import com.example.androidlearningapp.movies.ui.adapter.viewholder.MovieElementViewHolder;
 
 import java.util.ArrayList;
@@ -60,13 +60,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
     public void showLoading() {
         if (isLastItemWithType(Movie.TYPE)) {
             List<MovieElement> list = new ArrayList<>(movies);
-            list.add(new Progress());
+            list.add(new MovieProgress());
             dispatchUpdates(list);
         }
     }
 
     public void dismissLoading() {
-        if (isLastItemWithType(Progress.TYPE)) {
+        if (isLastItemWithType(MovieProgress.TYPE)) {
             List<MovieElement> list = new ArrayList<>(movies);
             list.remove(movies.size() - 1);
             dispatchUpdates(list);
