@@ -1,8 +1,9 @@
 package com.example.androidlearningapp.movies.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Movie implements MovieElement {
+public class Movie implements MovieElement, Serializable {
     public static final int TYPE = 1;
     private String image;
     private String name;

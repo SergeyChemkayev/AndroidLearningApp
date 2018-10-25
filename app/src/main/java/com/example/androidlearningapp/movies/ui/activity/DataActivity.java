@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.movies.data.api.listeners.GetMoviesListener;
+import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
@@ -22,7 +23,7 @@ import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataActivity extends AppCompatActivity implements GetMoviesListener {
+public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
     private RecyclerView recyclerView;
     private View emptyView;
@@ -43,6 +44,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         setContentView(R.layout.activity_data);
         emptyView = findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
+        adapter.setOnMovieClickListener(this);
         initRecyclerView();
         initSwipeRefreshLayout();
         getMovies(pageNumber);
@@ -58,6 +60,15 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onStop() {
         super.onStop();
         moviesRemoteSource.setGetMoviesListener(null);
+    }
+
+    @Override
+    public void onMovieClick(Movie movie) {
+        openMovieActivity(movie);
+    }
+
+    public void openMovieActivity(Movie movie) {
+        MovieActivity.open(this, movie);
     }
 
     private void initRecyclerView() {
@@ -148,4 +159,5 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             emptyView.setVisibility(View.GONE);
         }
     }
+
 }

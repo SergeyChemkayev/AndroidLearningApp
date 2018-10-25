@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
+import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
 import com.example.androidlearningapp.movies.entity.MovieProgress;
@@ -23,6 +24,11 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> {
     private List<MovieElement> movies;
+    private OnMovieClickListener onMovieClickListener;
+
+    public void setOnMovieClickListener(OnMovieClickListener onMovieClickListener) {
+        this.onMovieClickListener = onMovieClickListener;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -51,7 +57,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == Movie.TYPE) {
-            return new MovieViewHolder(inflater.inflate(R.layout.movie_item, parent, false));
+            return new MovieViewHolder(inflater.inflate(R.layout.movie_item, parent, false), onMovieClickListener);
         } else {
             return new ProgressViewHolder(inflater.inflate(R.layout.loading_item, parent, false));
         }
@@ -99,24 +105,30 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
         itemsDiffResult.dispatchUpdatesTo(this);
     }
 
-    public static class MovieViewHolder extends MovieElementViewHolder {
+    public static class MovieViewHolder extends MovieElementViewHolder implements View.OnClickListener {
         private TextView nameView;
         private TextView nameEngView;
         private TextView descriptionView;
         private TextView premiereDateView;
         private ImageView movieCoverView;
 
-        public MovieViewHolder(View v) {
+        private Movie movie;
+        private OnMovieClickListener onMovieClickListener;
+
+        public MovieViewHolder(View v, OnMovieClickListener onMovieClickListener) {
             super(v);
             nameView = itemView.findViewById(R.id.movie_name_text_view);
             nameEngView = itemView.findViewById(R.id.movie_name_eng_text_view);
             descriptionView = itemView.findViewById(R.id.movie_description_text_view);
             premiereDateView = itemView.findViewById(R.id.movie_premiere_date_text_view);
             movieCoverView = itemView.findViewById(R.id.movie_cover_image_view);
+            this.onMovieClickListener = onMovieClickListener;
+            v.setOnClickListener(this);
+
         }
 
         public void bind(MovieElement movieElement) {
-            Movie movie = (Movie) movieElement;
+            movie = (Movie) movieElement;
             nameView.setText(movie.getId());
             nameEngView.setText(movie.getNameEng());
             descriptionView.setText(movie.getDescription());
@@ -125,6 +137,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
                     .load(movie.getImage())
                     .apply(new RequestOptions().centerCrop())
                     .into(movieCoverView);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onMovieClickListener.onMovieClick(movie);
         }
     }
 

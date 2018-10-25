@@ -3,6 +3,7 @@ package com.example.androidlearningapp.movies.ui.adapter.viewholder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.MovieElement;
 
 public abstract class MovieElementViewHolder extends RecyclerView.ViewHolder {
