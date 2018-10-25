@@ -22,7 +22,7 @@ public class MovieActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
-        movie = (Movie) getIntent().getSerializableExtra("movie");
+        movie = getIntent().getParcelableExtra("movie");
         Toast.makeText(this, movie.getName(), Toast.LENGTH_SHORT).show();
     }
 }
