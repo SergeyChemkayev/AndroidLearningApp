@@ -23,7 +23,8 @@
             android:parentActivityName=".movies.ui.activity.MainActivity"/>
         <activity
             android:name=".movies.ui.activity.MovieActivity"
-            android:parentActivityName=".movies.ui.activity.DataActivity"/>
+            android:parentActivityName=".movies.ui.activity.DataActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
