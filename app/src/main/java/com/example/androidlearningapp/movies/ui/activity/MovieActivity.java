@@ -13,6 +13,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.movies.entity.Movie;
 
+import java.util.Objects;
+
 public class MovieActivity extends AppCompatActivity {
     private ImageView movieCoverView;
     private TextView movieDescriptionView;
@@ -37,12 +39,12 @@ public class MovieActivity extends AppCompatActivity {
         movie = getIntent().getParcelableExtra("movie");
         movieNameToolbar.setTitle(movie.getName());
         setSupportActionBar(movieNameToolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Glide.with(this)
                 .load(movie.getImage())
                 .apply(new RequestOptions().centerCrop())
                 .into(movieCoverView);
         movieDescriptionView.setText(movie.getDescription());
     }
-
-
 }
