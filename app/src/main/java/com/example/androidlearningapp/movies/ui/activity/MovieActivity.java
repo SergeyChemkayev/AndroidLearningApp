@@ -1,10 +1,12 @@
 package com.example.androidlearningapp.movies.ui.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,8 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.movies.entity.Movie;
 
-import java.util.Objects;
-
 public class MovieActivity extends AppCompatActivity {
     private ImageView movieCoverView;
     private TextView movieDescriptionView;
@@ -22,11 +22,10 @@ public class MovieActivity extends AppCompatActivity {
 
     private Movie movie;
 
-
-    public static void open(Context context, Movie movie) {
-        Intent intent = new Intent(context, MovieActivity.class);
+    public static void open(Activity activity, Movie movie) {
+        Intent intent = new Intent(activity, MovieActivity.class);
         intent.putExtra("movie", movie);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, 1);
     }
 
     @Override
@@ -39,12 +38,28 @@ public class MovieActivity extends AppCompatActivity {
         movie = getIntent().getParcelableExtra("movie");
         movieNameToolbar.setTitle(movie.getName());
         setSupportActionBar(movieNameToolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        movieNameToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         Glide.with(this)
                 .load(movie.getImage())
                 .apply(new RequestOptions().centerCrop())
                 .into(movieCoverView);
         movieDescriptionView.setText(movie.getDescription());
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        intent.putExtra("movie_name", movie.getName());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

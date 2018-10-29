@@ -3,6 +3,7 @@ package com.example.androidlearningapp.movies.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -69,6 +70,14 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
 
     public void openMovieActivity(Movie movie) {
         MovieActivity.open(this, movie);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (data == null) {
+            return;
+        }
+        Toast.makeText(this, data.getStringExtra("movie_name"), Toast.LENGTH_SHORT).show();
     }
 
     private void initRecyclerView() {
@@ -159,5 +168,4 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             emptyView.setVisibility(View.GONE);
         }
     }
-
 }
