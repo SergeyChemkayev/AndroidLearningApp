@@ -41,6 +41,8 @@
 
     <style name="Text.Primary">
         <item name="android:textColor">@android:color/black</item>
+        <item name="android:padding">@dimen/text_view_padding</item>
+        <item name="android:lineSpacingExtra">@dimen/text_view_line_spacing_extra</item>
     </style>
 
     <style name="Text.Secondary">

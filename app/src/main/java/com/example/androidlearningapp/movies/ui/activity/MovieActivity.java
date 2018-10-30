@@ -22,10 +22,10 @@ public class MovieActivity extends AppCompatActivity {
 
     private Movie movie;
 
-    public static void open(Activity activity, Movie movie) {
+    public static void open(Activity activity, Movie movie, int requestCode) {
         Intent intent = new Intent(activity, MovieActivity.class);
         intent.putExtra("movie", movie);
-        activity.startActivityForResult(intent, 1);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -36,6 +36,11 @@ public class MovieActivity extends AppCompatActivity {
         movieDescriptionView = findViewById(R.id.movie_description_text_view);
         movieNameToolbar = findViewById(R.id.movie_name_toolbar);
         movie = getIntent().getParcelableExtra("movie");
+        initToolbar();
+        initMovie();
+    }
+
+    private void initToolbar() {
         movieNameToolbar.setTitle(movie.getName());
         setSupportActionBar(movieNameToolbar);
         ActionBar supportActionBar = getSupportActionBar();
@@ -48,6 +53,9 @@ public class MovieActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void initMovie() {
         Glide.with(this)
                 .load(movie.getImage())
                 .apply(new RequestOptions().centerCrop())

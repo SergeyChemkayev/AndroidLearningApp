@@ -26,6 +26,7 @@ import java.util.List;
 
 public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
+    public static final int REQUEST_CODE_MOVIE = 1;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
@@ -69,15 +70,14 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     public void openMovieActivity(Movie movie) {
-        MovieActivity.open(this, movie);
+        MovieActivity.open(this, movie, REQUEST_CODE_MOVIE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (data == null) {
-            return;
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_MOVIE) {
+            Toast.makeText(this, data.getStringExtra("movie_name"), Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, data.getStringExtra("movie_name"), Toast.LENGTH_SHORT).show();
     }
 
     private void initRecyclerView() {
