@@ -141,7 +141,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieElementViewHolder> 
 
         @Override
         public void onClick(View view) {
-            onMovieClickListener.onMovieClick(movie);
+            onMovieClickListener.onMovieClick(movie, movieCoverView, descriptionView);
         }
     }
 

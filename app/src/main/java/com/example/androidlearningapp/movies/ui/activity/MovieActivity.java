@@ -3,6 +3,7 @@ package com.example.androidlearningapp.movies.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,10 +23,10 @@ public class MovieActivity extends AppCompatActivity {
 
     private Movie movie;
 
-    public static void open(Activity activity, Movie movie, int requestCode) {
+    public static void open(Activity activity, Movie movie, int requestCode, ActivityOptionsCompat options) {
         Intent intent = new Intent(activity, MovieActivity.class);
         intent.putExtra("movie", movie);
-        activity.startActivityForResult(intent, requestCode);
+        activity.startActivityForResult(intent, requestCode, options.toBundle());
     }
 
     @Override
