@@ -2,23 +2,25 @@ package com.example.androidlearningapp.movies.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
+import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
+import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
 import com.example.androidlearningapp.movies.data.api.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
-import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
-import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
@@ -65,12 +67,15 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     @Override
-    public void onMovieClick(Movie movie) {
-        openMovieActivity(movie);
+    public void onMovieClick(Movie movie, View coverView, View descriptionView) {
+        openMovieActivity(movie, coverView, descriptionView);
     }
 
-    public void openMovieActivity(Movie movie) {
-        MovieActivity.open(this, movie, REQUEST_CODE_MOVIE);
+    public void openMovieActivity(Movie movie, View coverView, View descriptionView) {
+        Pair<View, String> movieCoverPair = Pair.create(coverView, "movie_cover");
+        Pair<View, String> movieDescriptionPair = Pair.create(descriptionView, "movie_description");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, movieCoverPair, movieDescriptionPair);
+        MovieActivity.open(this, movie, REQUEST_CODE_MOVIE, options);
     }
 
     @Override
