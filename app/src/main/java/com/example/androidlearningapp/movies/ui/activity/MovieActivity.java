@@ -21,8 +21,6 @@ public class MovieActivity extends AppCompatActivity {
     private TextView movieDescriptionView;
     private Toolbar movieNameToolbar;
 
-    private Movie movie;
-
     public static void open(Activity activity, Movie movie, int requestCode, ActivityOptionsCompat options) {
         Intent intent = new Intent(activity, MovieActivity.class);
         intent.putExtra("movie", movie);
@@ -33,16 +31,11 @@ public class MovieActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
-        movieCoverView = findViewById(R.id.movie_cover_toolbar_image_view);
-        movieDescriptionView = findViewById(R.id.movie_description_text_view);
-        movieNameToolbar = findViewById(R.id.movie_name_toolbar);
-        movie = getIntent().getParcelableExtra("movie");
-        initToolbar();
         initMovie();
+        initToolbar();
     }
 
     private void initToolbar() {
-        movieNameToolbar.setTitle(movie.getName());
         setSupportActionBar(movieNameToolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -57,18 +50,21 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     private void initMovie() {
+        movieCoverView = findViewById(R.id.movie_cover_toolbar_image_view);
+        movieDescriptionView = findViewById(R.id.movie_description_text_view);
+        movieNameToolbar = findViewById(R.id.movie_name_toolbar);
+        Movie movie = getIntent().getParcelableExtra("movie");
         Glide.with(this)
                 .load(movie.getImage())
                 .apply(new RequestOptions().centerCrop())
                 .into(movieCoverView);
         movieDescriptionView.setText(movie.getDescription());
+        movieNameToolbar.setTitle(movie.getName());
     }
 
     @Override
     public void onBackPressed() {
-        Intent intent = getIntent();
-        intent.putExtra("movie_name", movie.getName());
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_OK, getIntent());
         finish();
     }
 }

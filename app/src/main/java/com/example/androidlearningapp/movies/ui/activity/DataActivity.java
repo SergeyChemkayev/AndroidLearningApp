@@ -82,7 +82,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_MOVIE) {
             if (data != null) {
-                Toast.makeText(this, data.getStringExtra("movie_name"), Toast.LENGTH_SHORT).show();
+                Movie movie = data.getParcelableExtra("movie");
+                Toast.makeText(this, movie.getName(), Toast.LENGTH_SHORT).show();
             }
         }
     }
