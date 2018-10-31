@@ -53,5 +53,4 @@
             android:transitionName="movie_description"
             style="@style/TextView.Primary" />
     </android.support.v4.widget.NestedScrollView>
-
 </android.support.design.widget.CoordinatorLayout>

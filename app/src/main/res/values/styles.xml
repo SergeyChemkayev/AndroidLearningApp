@@ -53,5 +53,4 @@
     <style name="Text.Primary.Bold">
         <item name="android:textStyle">bold</item>
     </style>
-
 </resources>
