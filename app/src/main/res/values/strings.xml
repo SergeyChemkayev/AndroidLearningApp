@@ -3,4 +3,6 @@
     <string name="recycler_view_button">Recycler View</string>
     <string name="error_message">Something goes wrong</string>
     <string name="no_data_message">There is nothing to show :(</string>
+    <string name="movie_cover_transition_name">movie_cover_transition_name</string>
+    <string name="movie_description_transition_name">movie_description_transition_name</string>
 </resources>

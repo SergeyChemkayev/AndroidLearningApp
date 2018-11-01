@@ -72,8 +72,8 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     public void openMovieActivity(Movie movie, View coverView, View descriptionView) {
-        Pair<View, String> movieCoverPair = Pair.create(coverView, "movie_cover");
-        Pair<View, String> movieDescriptionPair = Pair.create(descriptionView, "movie_description");
+        Pair<View, String> movieCoverPair = Pair.create(coverView, getText(R.string.movie_cover_transition_name).toString());
+        Pair<View, String> movieDescriptionPair = Pair.create(descriptionView, getText(R.string.movie_description_transition_name).toString());
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, movieCoverPair, movieDescriptionPair);
         MovieActivity.open(this, movie, REQUEST_CODE_MOVIE, options);
     }

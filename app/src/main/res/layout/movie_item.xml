@@ -9,7 +9,7 @@
         android:layout_width="@dimen/item_image_width"
         android:layout_height="@dimen/item_image_height"
         android:layout_marginEnd="@dimen/text_small_margin"
-        android:transitionName="movie_cover" />
+        android:transitionName="@string/movie_cover_transition_name" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:id="@+id/movie_description_text_view"
                 style="@style/TextView.Primary"
                 android:layout_marginTop="@dimen/text_small_margin"
-                android:transitionName="movie_description" />
+                android:transitionName="@string/movie_description_transition_name" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
