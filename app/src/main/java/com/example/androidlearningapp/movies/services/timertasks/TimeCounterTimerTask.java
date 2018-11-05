@@ -4,10 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimerTask;
 
 public class TimeCounterTimerTask extends TimerTask {
@@ -27,10 +23,8 @@ public class TimeCounterTimerTask extends TimerTask {
             public void run() {
                 mHandler.post(new Runnable() {
                     public void run() {
-                        DateFormat formatter = new SimpleDateFormat("hh:mm:ss.SSS",Locale.GERMAN);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(System.currentTimeMillis()-startTime);
-                        Toast.makeText(context, formatter.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
+                        long timeInMillis = System.currentTimeMillis() - startTime;
+                        Toast.makeText(context, String.format("%02d:%02d:%02d", timeInMillis / 1000 / 3600, timeInMillis / 1000 / 60 % 60, timeInMillis / 1000 % 60), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
