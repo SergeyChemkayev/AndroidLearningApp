@@ -25,6 +25,7 @@
             android:name=".movies.ui.activity.MovieActivity"
             android:parentActivityName=".movies.ui.activity.DataActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <service android:name=".movies.services.TimeCounterService"/>
     </application>
 
 </manifest>
