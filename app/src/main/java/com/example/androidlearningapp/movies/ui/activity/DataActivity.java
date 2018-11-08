@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private SwipeRefreshLayout swipeRefreshLayout;
+    private Toolbar dataCaptionToolbar;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
 
@@ -49,9 +52,26 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         emptyView = findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
         adapter.setOnMovieClickListener(this);
+        initToolbar();
         initRecyclerView();
         initSwipeRefreshLayout();
         getMovies(pageNumber);
+    }
+
+    private void initToolbar() {
+        dataCaptionToolbar = findViewById(R.id.data_caption_toolbar);
+        dataCaptionToolbar.setTitle(R.string.data_activity_title);
+        setSupportActionBar(dataCaptionToolbar);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        dataCaptionToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override

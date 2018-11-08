@@ -18,8 +18,8 @@ public class TimeCounterService extends Service {
     public void onCreate() {
         super.onCreate();
         timer = new Timer();
-        TimerTask showToast = new TimeCounterTimerTask(this, System.currentTimeMillis());
-        timer.scheduleAtFixedRate(showToast, 0, 2000);
+        TimerTask toastDemonstrator = new TimeCounterTimerTask(this, System.currentTimeMillis());
+        timer.scheduleAtFixedRate(toastDemonstrator, 0, 2000);
     }
 
     @Nullable
@@ -31,7 +31,7 @@ public class TimeCounterService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this,"Service stoped",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Service stoped", Toast.LENGTH_SHORT).show();
         timer.cancel();
     }
 }
