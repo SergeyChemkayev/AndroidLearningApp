@@ -2,28 +2,33 @@ package com.example.androidlearningapp.movies.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
+import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
+import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
 import com.example.androidlearningapp.movies.data.api.listeners.GetMoviesListener;
+import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
-import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
-import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataActivity extends AppCompatActivity implements GetMoviesListener {
+public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
+    public static final int REQUEST_CODE_MOVIE = 1;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
@@ -43,6 +48,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         setContentView(R.layout.activity_data);
         emptyView = findViewById(R.id.data_empty_view);
         adapter = new MoviesAdapter();
+        adapter.setOnMovieClickListener(this);
         initRecyclerView();
         initSwipeRefreshLayout();
         getMovies(pageNumber);
@@ -58,6 +64,28 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     protected void onStop() {
         super.onStop();
         moviesRemoteSource.setGetMoviesListener(null);
+    }
+
+    @Override
+    public void onMovieClick(Movie movie, View coverView, View descriptionView) {
+        openMovieActivity(movie, coverView, descriptionView);
+    }
+
+    public void openMovieActivity(Movie movie, View coverView, View descriptionView) {
+        Pair<View, String> movieCoverPair = Pair.create(coverView, getText(R.string.movie_cover_transition_name).toString());
+        Pair<View, String> movieDescriptionPair = Pair.create(descriptionView, getText(R.string.movie_description_transition_name).toString());
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, movieCoverPair, movieDescriptionPair);
+        MovieActivity.open(this, movie, REQUEST_CODE_MOVIE, options);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_MOVIE) {
+            if (data != null) {
+                Movie movie = data.getParcelableExtra("movie");
+                Toast.makeText(this, movie.getName(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void initRecyclerView() {
