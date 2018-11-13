@@ -19,7 +19,7 @@ public class TimeCounterService extends Service {
         super.onCreate();
         timer = new Timer();
         TimerTask toastDemonstrator = new TimeCounterTimerTask(this, System.currentTimeMillis());
-        timer.scheduleAtFixedRate(toastDemonstrator, 0, 2000);
+        timer.scheduleAtFixedRate(toastDemonstrator, 0, 10000);
     }
 
     @Nullable
