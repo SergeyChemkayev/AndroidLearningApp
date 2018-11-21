@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_main_settings"
-        android:icon="@drawable/ic_android_white"
+        android:icon="@drawable/ic_android_white_24dp"
         android:title="@string/main_menu_settings"
         app:showAsAction="ifRoom">
 
