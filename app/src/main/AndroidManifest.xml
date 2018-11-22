@@ -25,6 +25,9 @@
             android:name=".movies.ui.activity.MovieActivity"
             android:parentActivityName=".movies.ui.activity.DataActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".movies.ui.activity.FragmentActivity"
+            android:parentActivityName=".movies.ui.activity.DataActivity" />
     </application>
 
 </manifest>

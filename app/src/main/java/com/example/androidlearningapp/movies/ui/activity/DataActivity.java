@@ -11,6 +11,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -85,6 +87,23 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
                 Movie movie = data.getParcelableExtra("movie");
                 Toast.makeText(this, movie.getName(), Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.data_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main_fragments:
+                FragmentActivity.open(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
