@@ -16,8 +16,6 @@
         android:id="@+id/fragment_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/darker_gray"
+        android:background="?android:attr/windowBackground"
         app:menu="@menu/fragment_bottom_navigation_menu" />
-
 </LinearLayout>
