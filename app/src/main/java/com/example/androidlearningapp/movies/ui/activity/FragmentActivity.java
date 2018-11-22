@@ -26,8 +26,7 @@ public class FragmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationInit();
         loadFragment(HomeFragment.newInstance());
     }
 
@@ -42,29 +41,31 @@ public class FragmentActivity extends AppCompatActivity {
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private void bottomNavigationInit() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.fragment_bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    loadFragment(HomeFragment.newInstance());
-                    return true;
-                case R.id.navigation_dashboard:
-                    loadFragment(DashboardFragment.newInstance());
-                    return true;
-                case R.id.navigation_notifications:
-                    loadFragment(NotificationsFragment.newInstance());
-                    return true;
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        loadFragment(HomeFragment.newInstance());
+                        return true;
+                    case R.id.navigation_dashboard:
+                        loadFragment(DashboardFragment.newInstance());
+                        return true;
+                    case R.id.navigation_notifications:
+                        loadFragment(NotificationsFragment.newInstance());
+                        return true;
+                }
+                return false;
             }
-            return false;
-        }
-    };
+        });
+    }
 
     private void loadFragment(Fragment fragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_content, fragment);
-        ft.commit();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_content_layout, fragment);
+        fragmentTransaction.commit();
     }
 }

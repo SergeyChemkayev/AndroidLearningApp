@@ -2,6 +2,7 @@ package com.example.androidlearningapp.movies.ui.fragments;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import com.example.androidlearningapp.R;
 
 public class NotificationsFragment extends Fragment {
 
-
     public NotificationsFragment() {
     }
 
@@ -21,9 +21,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_notifications, container, false);
     }
-
 }
