@@ -5,9 +5,11 @@
     <string name="no_data_message">There is nothing to show :(</string>
     <string name="movie_cover_transition_name">movie_cover_transition_name</string>
     <string name="movie_description_transition_name">movie_description_transition_name</string>
-    <string name="main_menu_fragment">fragments</string>
-    <string name="main_menu_settings">settings</string>
+    <string name="data_menu_root">menu</string>
+    <string name="data_menu_fragment">fragments</string>
+    <string name="data_menu_settings">settings</string>
     <string name="title_home">Home</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_dashboard">Dashboard</string>
+    <string name="preferences_text_input_layout_hint">input layout hint</string>
 </resources>
