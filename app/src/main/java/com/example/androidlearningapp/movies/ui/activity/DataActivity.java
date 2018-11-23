@@ -99,8 +99,11 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_main_fragments:
+            case R.id.data_menu_fragments:
                 FragmentActivity.open(this);
+                return true;
+            case R.id.data_menu_settings:
+                PreferencesActivity.Companion.open(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

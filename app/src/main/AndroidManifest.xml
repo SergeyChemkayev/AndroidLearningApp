@@ -28,6 +28,9 @@
         <activity
             android:name=".movies.ui.activity.FragmentActivity"
             android:parentActivityName=".movies.ui.activity.DataActivity" />
+        <activity
+            android:name=".movies.ui.activity.PreferencesActivity"
+            android:parentActivityName=".movies.ui.activity.DataActivity"/>
     </application>
 
 </manifest>
