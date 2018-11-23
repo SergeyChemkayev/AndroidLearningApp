@@ -19,7 +19,7 @@ class PreferencesActivity : AppCompatActivity() {
         }
     }
 
-    private var preferencesApi: PreferencesApi = PreferencesManager(getPreferences(Context.MODE_PRIVATE))
+    private val preferencesApi: PreferencesApi = PreferencesManager(getPreferences(Context.MODE_PRIVATE))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
