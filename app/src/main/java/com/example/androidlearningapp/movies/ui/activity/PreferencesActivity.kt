@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.example.androidlearningapp.R
+import com.example.androidlearningapp.movies.data.api.PreferencesApi
 import com.example.androidlearningapp.movies.data.api.PreferencesManager
 import kotlinx.android.synthetic.main.activity_preferences.*
 
@@ -18,7 +19,7 @@ class PreferencesActivity : AppCompatActivity() {
         }
     }
 
-    private var preferencesApi = PreferencesManager(getPreferences(Context.MODE_PRIVATE))
+    private var preferencesApi: PreferencesApi = PreferencesManager(getPreferences(Context.MODE_PRIVATE))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
