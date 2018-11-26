@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.androidlearningapp.movies.data.api.extensions.*;
+
 import com.example.androidlearningapp.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
-                    Toast.makeText(context, "Airplane mode changed", Toast.LENGTH_SHORT).show();
+                    ToastKt.toast(context, "Airplane mode changed");
                 }
             }
         };
