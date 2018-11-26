@@ -30,7 +30,15 @@
             android:parentActivityName=".movies.ui.activity.DataActivity" />
         <activity
             android:name=".movies.ui.activity.PreferencesActivity"
-            android:parentActivityName=".movies.ui.activity.DataActivity"/>
-    </application>
+            android:parentActivityName=".movies.ui.activity.DataActivity" />
 
+        <receiver
+            android:name="com.example.androidlearningapp.movies.data.api.listeners.PowerStatusReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>
