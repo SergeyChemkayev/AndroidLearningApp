@@ -14,6 +14,7 @@ import com.example.androidlearningapp.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button button;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +25,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+    protected void onStart() {
+        super.onStart();
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
@@ -35,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         registerReceiver(receiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
     }
 
     @Override

@@ -10,7 +10,6 @@ class PowerStatusReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             "android.intent.action.ACTION_POWER_CONNECTED", "android.intent.action.ACTION_POWER_DISCONNECTED" -> Toast.makeText(context, "Power status changed", Toast.LENGTH_SHORT).show()
-            else -> return
         }
     }
 }
