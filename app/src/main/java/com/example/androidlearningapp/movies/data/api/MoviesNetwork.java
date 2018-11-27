@@ -2,7 +2,7 @@ package com.example.androidlearningapp.movies.data.api;
 
 import android.support.annotation.NonNull;
 
-import com.example.androidlearningapp.movies.data.api.listeners.GetMoviesListener;
+import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movies.entity.MovieList;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

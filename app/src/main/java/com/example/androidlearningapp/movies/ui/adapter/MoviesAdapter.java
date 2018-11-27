@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.androidlearningapp.R;
-import com.example.androidlearningapp.movies.data.api.listeners.OnMovieClickListener;
+import com.example.androidlearningapp.movies.data.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
 import com.example.androidlearningapp.movies.entity.MovieProgress;
