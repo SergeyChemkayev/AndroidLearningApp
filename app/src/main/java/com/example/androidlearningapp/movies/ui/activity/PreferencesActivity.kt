@@ -19,11 +19,12 @@ class PreferencesActivity : AppCompatActivity() {
         }
     }
 
-    private val preferencesApi: PreferencesApi = PreferencesManager(getPreferences(Context.MODE_PRIVATE))
+    private lateinit var preferencesApi: PreferencesApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
+        preferencesApi = PreferencesManager(getPreferences(android.content.Context.MODE_PRIVATE))
         getData()
     }
 

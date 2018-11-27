@@ -1,4 +1,4 @@
-package com.example.androidlearningapp.movies.data.api.extensions
+package com.example.androidlearningapp.movies.data.extensions
 
 import android.content.Context
 import android.widget.Toast

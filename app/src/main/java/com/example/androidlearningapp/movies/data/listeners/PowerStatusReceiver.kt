@@ -1,9 +1,9 @@
-package com.example.androidlearningapp.movies.data.api.listeners
+package com.example.androidlearningapp.movies.data.listeners
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.androidlearningapp.movies.data.api.extensions.toast
+import com.example.androidlearningapp.movies.data.extensions.toast
 
 class PowerStatusReceiver : BroadcastReceiver() {
 

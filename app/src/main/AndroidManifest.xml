@@ -33,7 +33,7 @@
             android:parentActivityName=".movies.ui.activity.DataActivity" />
 
         <receiver
-            android:name="com.example.androidlearningapp.movies.data.api.listeners.PowerStatusReceiver"
+            android:name="com.example.androidlearningapp.movies.data.listeners.PowerStatusReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
