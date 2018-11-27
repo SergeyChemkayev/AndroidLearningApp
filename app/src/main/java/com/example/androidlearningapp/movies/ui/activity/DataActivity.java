@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
+import com.example.androidlearningapp.movies.data.api.MovieCacheManager;
 import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
 import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
@@ -182,11 +183,15 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private void addMovies(List<Movie> movies) {
         List<MovieElement> list = new ArrayList<>();
         list.addAll(movies);
+        MovieCacheManager movieCacheManager = new MovieCacheManager(this);
         if (pageNumber == 1) {
             adapter.setMovies(list);
+            movieCacheManager.removeEntries();
         } else {
             adapter.addMovies(list);
         }
+        movieCacheManager.putEntries(movies);
+        movieCacheManager.getEntries();
     }
 
     private void updateViewsVisibility() {
