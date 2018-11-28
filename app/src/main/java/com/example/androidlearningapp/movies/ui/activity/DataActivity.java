@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
 import com.example.androidlearningapp.movies.data.api.MovieCacheApi;
-import com.example.androidlearningapp.movies.data.api.MovieCacheManager;
+import com.example.androidlearningapp.movies.data.api.MovieRoomCacheManager;
 import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
 import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
@@ -40,7 +40,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
-    private MovieCacheApi movieCacheManager = new MovieCacheManager(this);
+    private MovieCacheApi movieCacheManager;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -52,6 +52,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
         emptyView = findViewById(R.id.data_empty_view);
+        movieCacheManager = new MovieRoomCacheManager(this);
         adapter = new MoviesAdapter();
         adapter.setOnMovieClickListener(this);
         initRecyclerView();

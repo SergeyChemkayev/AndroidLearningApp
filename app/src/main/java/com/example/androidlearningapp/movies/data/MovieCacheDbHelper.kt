@@ -11,7 +11,7 @@ class MovieCacheDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL(MovieCacheConstruct.SQL_DELETE_ENTRIES)
+        db.execSQL(MovieCacheConstruct.SQL_DELETE_ALL_ENTRIES)
         onCreate(db)
     }
 

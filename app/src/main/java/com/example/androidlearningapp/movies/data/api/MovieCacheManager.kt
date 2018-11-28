@@ -48,7 +48,7 @@ class MovieCacheManager(context: Context) : MovieCacheApi {
     }
 
     private fun parseCursorToMovies(cursor: Cursor): MutableList<Movie> {
-        val moviesList: MutableList<Movie> = mutableListOf<Movie>()
+        val moviesList: MutableList<Movie> = mutableListOf()
         with(cursor) {
             while (moveToNext()) {
                 Log.d("SQL", getLong(getColumnIndexOrThrow(BaseColumns._ID)).toString() + " || " + getString(getColumnIndexOrThrow(MovieEntry.COLUMN_NAME_NAME)) + "\n")

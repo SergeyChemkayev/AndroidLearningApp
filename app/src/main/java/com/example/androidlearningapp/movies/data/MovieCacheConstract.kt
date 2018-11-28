@@ -13,13 +13,14 @@ object MovieCacheConstruct {
     }
 
     const val SQL_CREATE_ENTRIES =
-            "CREATE TABLE ${MovieCacheConstruct.MovieEntry.TABLE_NAME} (" +
+            "CREATE TABLE ${MovieEntry.TABLE_NAME} (" +
                     "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-                    "${MovieCacheConstruct.MovieEntry.COLUMN_NAME_NAME} TEXT," +
-                    "${MovieCacheConstruct.MovieEntry.COLUMN_NAME_NAME_ENG} TEXT," +
-                    "${MovieCacheConstruct.MovieEntry.COLUMN_NAME_PREMIERE} TEXT," +
-                    "${MovieCacheConstruct.MovieEntry.COLUMN_NAME_DESCRIPTION} TEXT," +
-                    "${MovieCacheConstruct.MovieEntry.COLUMN_NAME_COVER} TEXT)"
+                    "${MovieEntry.COLUMN_NAME_NAME} TEXT," +
+                    "${MovieEntry.COLUMN_NAME_NAME_ENG} TEXT," +
+                    "${MovieEntry.COLUMN_NAME_PREMIERE} TEXT," +
+                    "${MovieEntry.COLUMN_NAME_DESCRIPTION} TEXT," +
+                    "${MovieEntry.COLUMN_NAME_COVER} TEXT)"
 
-    const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${MovieCacheConstruct.MovieEntry.TABLE_NAME}"
+    const val SQL_SELECT_ALL_ENTRIES = "SELECT * FROM ${MovieEntry.TABLE_NAME}"
+    const val SQL_DELETE_ALL_ENTRIES = "DELETE FROM ${MovieEntry.TABLE_NAME}"
 }
