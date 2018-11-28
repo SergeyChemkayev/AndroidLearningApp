@@ -52,7 +52,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
         emptyView = findViewById(R.id.data_empty_view);
-        movieCacheManager = new MovieRoomCacheManager(this);
+        movieCacheManager = new MovieRoomCacheManager();
         adapter = new MoviesAdapter();
         adapter.setOnMovieClickListener(this);
         initRecyclerView();
@@ -172,7 +172,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     public void onGetMoviesError(Throwable error) {
         hideLoading();
         isAbleToLoadMovies = true;
-        adapter.setMovies(new ArrayList<MovieElement>(movieCacheManager.getEntries()));
+        adapter.setMovies(new ArrayList<MovieElement>(movieCacheManager.getMovies()));
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
@@ -189,11 +189,11 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         list.addAll(movies);
         if (pageNumber == 1) {
             adapter.setMovies(list);
-            movieCacheManager.removeEntries();
+            movieCacheManager.removeMovies();
         } else {
             adapter.addMovies(list);
         }
-        movieCacheManager.putEntries(movies);
+        movieCacheManager.putMovies(movies);
     }
 
     private void updateViewsVisibility() {

@@ -13,7 +13,7 @@ class MovieCacheManager(context: Context) : MovieCacheApi {
 
     private val dbHelper = MovieCacheDbHelper(context)
 
-    override fun putEntries(movies: List<Movie>) {
+    override fun putMovies(movies: List<Movie>) {
         val db = dbHelper.writableDatabase
         movies.forEach {
             val values = ContentValues().apply {
@@ -27,7 +27,7 @@ class MovieCacheManager(context: Context) : MovieCacheApi {
         }
     }
 
-    override fun getEntries(): MutableList<Movie> {
+    override fun getMovies(): List<Movie> {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(BaseColumns._ID, MovieEntry.COLUMN_NAME_NAME, MovieEntry.COLUMN_NAME_NAME_ENG, MovieEntry.COLUMN_NAME_PREMIERE, MovieEntry.COLUMN_NAME_DESCRIPTION, MovieEntry.COLUMN_NAME_COVER)
         val cursor = db.query(
@@ -42,7 +42,7 @@ class MovieCacheManager(context: Context) : MovieCacheApi {
         return parseCursorToMovies(cursor)
     }
 
-    override fun removeEntries() {
+    override fun removeMovies() {
         val db = dbHelper.writableDatabase
         db.delete(MovieEntry.TABLE_NAME, null, null)
     }

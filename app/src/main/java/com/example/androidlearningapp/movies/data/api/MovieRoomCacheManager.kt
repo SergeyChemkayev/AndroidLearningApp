@@ -1,51 +1,54 @@
 package com.example.androidlearningapp.movies.data.api
 
-import android.content.Context
 import com.example.androidlearningapp.movies.data.AppRoomDatabase
 import com.example.androidlearningapp.movies.entity.Movie
 import com.example.androidlearningapp.movies.entity.MovieRoomEntity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class MovieRoomCacheManager(context: Context) : MovieCacheApi {
+class MovieRoomCacheManager : MovieCacheApi {
 
-    private val appRoomDataBaseInstance = AppRoomDatabase.getInstance(context)
+    private val appRoomDataBaseDao = AppRoomDatabase.instance.movieDao()
 
-    override fun putEntries(movies: List<Movie>) {
-        appRoomDataBaseInstance?.movieDao()?.insertAll(*parseMoviesToMovieRoomEntities(movies))
+    override fun putMovies(movies: List<Movie>) {
+        GlobalScope.launch {
+            appRoomDataBaseDao.insertAll(*parseMoviesToMovieRoomEntities(movies))
+        }
     }
 
-    override fun getEntries(): MutableList<Movie> {
-        return parseMovieRoomEntitiesToMovies(appRoomDataBaseInstance?.movieDao()?.getAll())
+    override fun getMovies(): List<Movie>? {
+        return runBlocking { GlobalScope.async { parseMovieRoomEntitiesToMovies(appRoomDataBaseDao.getAll()) }.await() }
     }
 
-    override fun removeEntries() {
-        appRoomDataBaseInstance?.movieDao()?.removeAll()
+    override fun removeMovies() {
+        GlobalScope.launch {
+            appRoomDataBaseDao.removeAll()
+        }
     }
 
     private fun parseMoviesToMovieRoomEntities(movies: List<Movie>): Array<MovieRoomEntity> {
-        val movieRoomEntityList: MutableList<MovieRoomEntity> = mutableListOf()
-        movies.forEach {
-            movieRoomEntityList.add(MovieRoomEntity(
+        return movies.map {
+            MovieRoomEntity(
                     name = it.name,
                     nameEng = it.nameEng,
                     premiere = it.premiere,
                     description = it.description,
-                    cover = it.image,
-                    id = null))
-        }
-        return movieRoomEntityList.toTypedArray()
+                    cover = it.image
+            )
+        }.toTypedArray()
     }
 
-    private fun parseMovieRoomEntitiesToMovies(moviesRoomEntities: List<MovieRoomEntity>?): MutableList<Movie> {
-        val moviesList: MutableList<Movie> = mutableListOf()
-        moviesRoomEntities?.forEach {
-            moviesList.add(Movie(
+    private fun parseMovieRoomEntitiesToMovies(moviesRoomEntities: List<MovieRoomEntity>?): List<Movie>? {
+        return moviesRoomEntities?.map {
+            Movie(
                     it.name,
                     it.nameEng,
                     it.premiere,
                     it.description,
                     it.cover
-            ))
+            )
         }
-        return moviesList
     }
 }
