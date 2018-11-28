@@ -13,7 +13,15 @@ public class Movie implements MovieElement, Parcelable {
     private String premiere;
     private String description;
 
-    private Movie(Parcel parcel){
+    public Movie(String name, String nameEng, String premiere, String description, String image) {
+        this.name = name;
+        this.nameEng = nameEng;
+        this.premiere = premiere;
+        this.description = description;
+        this.image = image;
+    }
+
+    private Movie(Parcel parcel) {
         String[] data = new String[5];
         parcel.readStringArray(data);
         image = data[0];
@@ -100,15 +108,15 @@ public class Movie implements MovieElement, Parcelable {
         parcel.writeStringArray(new String[]{image, name, nameEng, premiere, description});
     }
 
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override
-        public Movie createFromParcel(Parcel parcel){
+        public Movie createFromParcel(Parcel parcel) {
             return new Movie(parcel);
         }
 
         @Override
-        public Movie[] newArray(int size){
+        public Movie[] newArray(int size) {
             return new Movie[size];
         }
     };
