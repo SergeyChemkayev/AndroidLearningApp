@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
-import com.example.androidlearningapp.movies.data.api.MovieCacheApi;
+import com.example.androidlearningapp.movies.data.api.MovieCacheSource;
 import com.example.androidlearningapp.movies.data.api.MovieRoomCacheManager;
 import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
@@ -40,7 +40,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
-    private MovieCacheApi movieCacheManager;
+    private MovieCacheSource movieCacheManager;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);

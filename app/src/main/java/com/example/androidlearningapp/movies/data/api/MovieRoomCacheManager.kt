@@ -2,24 +2,24 @@ package com.example.androidlearningapp.movies.data.api
 
 import com.example.androidlearningapp.movies.data.AppRoomDatabase
 import com.example.androidlearningapp.movies.entity.Movie
-import com.example.androidlearningapp.movies.entity.MovieRoomEntity
+import com.example.androidlearningapp.movies.entity.RoomMovie
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class MovieRoomCacheManager : MovieCacheApi {
+class MovieRoomCacheManager : MovieCacheSource {
 
     private val appRoomDataBaseDao = AppRoomDatabase.instance.movieDao()
 
     override fun putMovies(movies: List<Movie>) {
         GlobalScope.launch {
-            appRoomDataBaseDao.insertAll(*parseMoviesToMovieRoomEntities(movies))
+            appRoomDataBaseDao.insertAll(*parseMoviesToRoomMovies(movies))
         }
     }
 
-    override fun getMovies(): List<Movie>? {
-        return runBlocking { GlobalScope.async { parseMovieRoomEntitiesToMovies(appRoomDataBaseDao.getAll()) }.await() }
+    override fun getMovies(): List<Movie> {
+        return runBlocking { GlobalScope.async { parseRoomMoviesToMovies(appRoomDataBaseDao.getAll()) }.await() }
     }
 
     override fun removeMovies() {
@@ -28,27 +28,18 @@ class MovieRoomCacheManager : MovieCacheApi {
         }
     }
 
-    private fun parseMoviesToMovieRoomEntities(movies: List<Movie>): Array<MovieRoomEntity> {
+    private fun parseMoviesToRoomMovies(movies: List<Movie>): Array<RoomMovie> {
         return movies.map {
-            MovieRoomEntity(
-                    name = it.name,
-                    nameEng = it.nameEng,
-                    premiere = it.premiere,
-                    description = it.description,
-                    cover = it.image
-            )
+            it.toRoomMovie()
         }.toTypedArray()
     }
 
-    private fun parseMovieRoomEntitiesToMovies(moviesRoomEntities: List<MovieRoomEntity>?): List<Movie>? {
-        return moviesRoomEntities?.map {
-            Movie(
-                    it.name,
-                    it.nameEng,
-                    it.premiere,
-                    it.description,
-                    it.cover
-            )
+    private fun parseRoomMoviesToMovies(roomMovies: List<RoomMovie>): List<Movie> {
+        return roomMovies.map {
+            it.toMovie()
         }
     }
+
+    private fun Movie.toRoomMovie(): RoomMovie = RoomMovie(name, nameEng, premiere, description, image)
+    private fun RoomMovie.toMovie(): Movie = Movie(name, nameEng, premiere, description, cover)
 }

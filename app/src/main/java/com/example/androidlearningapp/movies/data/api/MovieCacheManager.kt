@@ -9,7 +9,7 @@ import com.example.androidlearningapp.movies.data.MovieCacheConstruct.MovieEntry
 import com.example.androidlearningapp.movies.data.MovieCacheDbHelper
 import com.example.androidlearningapp.movies.entity.Movie
 
-class MovieCacheManager(context: Context) : MovieCacheApi {
+class MovieCacheManager(context: Context) : MovieCacheSource {
 
     private val dbHelper = MovieCacheDbHelper(context)
 
