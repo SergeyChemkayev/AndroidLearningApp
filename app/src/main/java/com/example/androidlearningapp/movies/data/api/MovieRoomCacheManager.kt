@@ -23,8 +23,10 @@ class MovieRoomCacheManager : MovieCacheSource {
     }
 
     override fun removeMovies() {
-        GlobalScope.launch {
-            appRoomDataBaseDao.removeAll()
+        runBlocking {
+            GlobalScope.launch {
+                appRoomDataBaseDao.removeAll()
+            }.join()
         }
     }
 
