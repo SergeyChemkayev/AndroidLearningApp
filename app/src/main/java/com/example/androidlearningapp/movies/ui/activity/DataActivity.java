@@ -30,8 +30,8 @@ import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
 
 public class DataActivity extends AppCompatActivity implements OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
@@ -39,7 +39,7 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
-    private MoviesRemoteSource moviesRemoteSource = new MoviesNetwork();
+    private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
@@ -62,16 +62,6 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         initRecyclerView();
         initSwipeRefreshLayout();
         getMovies(pageNumber);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -143,12 +133,9 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
 
     private void initSwipeRefreshLayout() {
         swipeRefreshLayout = findViewById(R.id.data_swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (isAbleToLoadMovies) {
-                    getMovies(1);
-                }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (isAbleToLoadMovies) {
+                getMovies(1);
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -165,19 +152,10 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         } else {
             adapter.showLoading();
         }
-        compositeDisposable.add(moviesRemoteSource.getMovieListObservable().subscribeWith(new DisposableSingleObserver<MovieList>() {
-            @Override
-            public void onSuccess(MovieList movieList) {
-                if (movieList != null) {
-                    onGetMoviesSuccess(movieList.getList());
-                }
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                onGetMoviesError(error);
-            }
-        }));
+        compositeDisposable.add(moviesRemoteSource.getMovieListObservable()
+                .map(MovieList::getList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetMoviesSuccess, this::onGetMoviesError));
     }
 
     public void onGetMoviesSuccess(List<Movie> movies) {
@@ -190,7 +168,7 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     public void onGetMoviesError(Throwable error) {
         hideLoading();
         isAbleToLoadMovies = true;
-        adapter.setMovies(new ArrayList<MovieElement>(movieCacheManager.getMovies()));
+        adapter.setMovies(new ArrayList<>(movieCacheManager.getMovies()));
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
