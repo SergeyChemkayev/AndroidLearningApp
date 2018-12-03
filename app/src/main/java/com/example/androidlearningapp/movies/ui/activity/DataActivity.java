@@ -73,6 +73,12 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        moviesRemoteSource.dispose();
+    }
+
+    @Override
     public void onMovieClick(Movie movie, View coverView, View descriptionView) {
         openMovieActivity(movie, coverView, descriptionView);
     }

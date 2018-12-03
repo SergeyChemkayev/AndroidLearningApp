@@ -7,28 +7,37 @@ import com.example.androidlearningapp.movies.entity.MovieList;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MoviesNetwork implements MoviesRemoteSource {
     private GetMoviesListener getMoviesListener;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    @Override
     public void setGetMoviesListener(GetMoviesListener getMoviesListener) {
         this.getMoviesListener = getMoviesListener;
     }
 
+    @Override
     public void getMovies() {
-        getObservable().subscribeWith(getObserver());
+        compositeDisposable.add(getMovieListObservable().subscribeWith(getMovieListObserver()));
     }
 
-    private Observable<MovieList> getObservable() {
+    @Override
+    public void dispose() {
+        compositeDisposable.dispose();
+    }
+
+    private Observable<MovieList> getMovieListObservable() {
         return NetworkClient.getRetrofit().create(MoviesApi.class)
                 .movies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private DisposableObserver<MovieList> getObserver() {
+    private DisposableObserver<MovieList> getMovieListObserver() {
         return new DisposableObserver<MovieList>() {
             @Override
             public void onNext(MovieList movieList) {
