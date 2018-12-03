@@ -1,9 +1,9 @@
 package com.example.androidlearningapp.movies.data
 
-import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
 
-class AndroidLearningApplication : Application() {
+class AndroidLearningApplication : MultiDexApplication() {
 
     init {
         instance = this

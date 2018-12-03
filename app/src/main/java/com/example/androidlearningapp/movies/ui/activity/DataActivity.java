@@ -21,22 +21,26 @@ import com.example.androidlearningapp.movies.data.api.MovieCacheSource;
 import com.example.androidlearningapp.movies.data.api.MovieRoomCacheManager;
 import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
-import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movies.data.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
+import com.example.androidlearningapp.movies.entity.MovieList;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnMovieClickListener {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+
+public class DataActivity extends AppCompatActivity implements OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
     public static final int REQUEST_CODE_MOVIE = 1;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
@@ -61,15 +65,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        moviesRemoteSource.setGetMoviesListener(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        moviesRemoteSource.setGetMoviesListener(null);
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 
     @Override
@@ -135,12 +133,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
 
     private void initSwipeRefreshLayout() {
         swipeRefreshLayout = findViewById(R.id.data_swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (isAbleToLoadMovies) {
-                    getMovies(1);
-                }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (isAbleToLoadMovies) {
+                getMovies(1);
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -157,10 +152,12 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         } else {
             adapter.showLoading();
         }
-        moviesRemoteSource.getMovies();
+        compositeDisposable.add(moviesRemoteSource.getMovieListObservable()
+                .map(MovieList::getList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetMoviesSuccess, this::onGetMoviesError));
     }
 
-    @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
         hideLoading();
         isAbleToLoadMovies = movies != null && movies.size() == MOVIES_PER_PAGE;
@@ -168,11 +165,10 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         updateViewsVisibility();
     }
 
-    @Override
     public void onGetMoviesError(Throwable error) {
         hideLoading();
         isAbleToLoadMovies = true;
-        adapter.setMovies(new ArrayList<MovieElement>(movieCacheManager.getMovies()));
+        adapter.setMovies(new ArrayList<>(movieCacheManager.getMovies()));
         Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
