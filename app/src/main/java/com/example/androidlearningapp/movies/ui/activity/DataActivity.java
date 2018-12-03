@@ -36,7 +36,7 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
-    private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
+    private MoviesRemoteSource moviesRemoteSource = new MoviesNetwork();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
