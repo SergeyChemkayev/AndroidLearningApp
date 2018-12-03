@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,18 +26,23 @@ import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movies.data.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
+import com.example.androidlearningapp.movies.entity.MovieList;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataActivity extends AppCompatActivity implements GetMoviesListener, OnMovieClickListener {
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+
+public class DataActivity extends AppCompatActivity implements OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
     public static final int REQUEST_CODE_MOVIE = 1;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
     private MoviesRemoteSource moviesRemoteSource = new MoviesNetwork();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
     private int pageNumber = 1;
@@ -63,19 +69,17 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
     @Override
     protected void onStart() {
         super.onStart();
-        moviesRemoteSource.setGetMoviesListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        moviesRemoteSource.setGetMoviesListener(null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        moviesRemoteSource.dispose();
+        compositeDisposable.dispose();
     }
 
     @Override
@@ -163,10 +167,9 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         } else {
             adapter.showLoading();
         }
-        moviesRemoteSource.getMovies();
+        compositeDisposable.add(moviesRemoteSource.getMovieListObservable().subscribeWith(getMovieListObserver()));
     }
 
-    @Override
     public void onGetMoviesSuccess(List<Movie> movies) {
         hideLoading();
         isAbleToLoadMovies = movies != null && movies.size() == MOVIES_PER_PAGE;
@@ -174,7 +177,6 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
         updateViewsVisibility();
     }
 
-    @Override
     public void onGetMoviesError(Throwable error) {
         hideLoading();
         isAbleToLoadMovies = true;
@@ -210,5 +212,26 @@ public class DataActivity extends AppCompatActivity implements GetMoviesListener
             recyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
+    }
+
+    private DisposableObserver<MovieList> getMovieListObserver() {
+        return new DisposableObserver<MovieList>() {
+            @Override
+            public void onNext(MovieList movieList) {
+                if (movieList != null) {
+                    onGetMoviesSuccess(movieList.getList());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                onGetMoviesError(e);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d("RX", "Completed");
+            }
+        };
     }
 }
