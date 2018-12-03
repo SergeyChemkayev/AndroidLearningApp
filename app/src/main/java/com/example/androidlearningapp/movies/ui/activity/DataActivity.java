@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.example.androidlearningapp.movies.data.api.MovieCacheSource;
 import com.example.androidlearningapp.movies.data.api.MovieRoomCacheManager;
 import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
 import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
-import com.example.androidlearningapp.movies.data.listeners.GetMoviesListener;
 import com.example.androidlearningapp.movies.data.listeners.OnMovieClickListener;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
@@ -33,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 
 public class DataActivity extends AppCompatActivity implements OnMovieClickListener {
     public static final int MOVIES_PER_PAGE = 7;
@@ -167,7 +165,19 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         } else {
             adapter.showLoading();
         }
-        compositeDisposable.add(moviesRemoteSource.getMovieListObservable().subscribeWith(getMovieListObserver()));
+        compositeDisposable.add(moviesRemoteSource.getMovieListObservable().subscribeWith(new DisposableSingleObserver<MovieList>() {
+            @Override
+            public void onSuccess(MovieList movieList) {
+                if (movieList != null) {
+                    onGetMoviesSuccess(movieList.getList());
+                }
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                onGetMoviesError(error);
+            }
+        }));
     }
 
     public void onGetMoviesSuccess(List<Movie> movies) {
@@ -212,26 +222,5 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
             recyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
-    }
-
-    private DisposableObserver<MovieList> getMovieListObserver() {
-        return new DisposableObserver<MovieList>() {
-            @Override
-            public void onNext(MovieList movieList) {
-                if (movieList != null) {
-                    onGetMoviesSuccess(movieList.getList());
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                onGetMoviesError(e);
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d("RX", "Completed");
-            }
-        };
     }
 }
