@@ -5,6 +5,8 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
@@ -16,6 +18,7 @@ public class MoviesNetwork implements MoviesRemoteSource {
 
     private static volatile MoviesRemoteSource INSTANCE = null;
     private static MoviesApi moviesApi;
+    private static final int TIMEOUT_SECONDS = 20;
 
     public static MoviesRemoteSource getInstance() {
         MoviesRemoteSource moviesRemoteSource = INSTANCE;
@@ -31,7 +34,8 @@ public class MoviesNetwork implements MoviesRemoteSource {
     }
 
     private MoviesNetwork() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = builder.build();
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
