@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -50,7 +50,7 @@ public class MoviesNetwork implements MoviesRemoteSource {
     }
 
     @Override
-    public Observable<MovieList> getMovieListSingle() {
+    public Single<MovieList> getMovieListSingle() {
         return moviesApi.movies();
     }
 }

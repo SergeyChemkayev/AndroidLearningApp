@@ -3,7 +3,7 @@ package com.example.androidlearningapp.movies.data.viewModels
 import android.arch.lifecycle.ViewModel
 import com.example.androidlearningapp.movies.data.useCase.*
 import com.example.androidlearningapp.movies.entity.Movie
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -19,7 +19,7 @@ class DataViewModel : ViewModel(), DataViewModelInterface {
     override val recyclerViewVisibility: PublishSubject<Boolean> = PublishSubject.create()
     override val isError: PublishSubject<Unit> = PublishSubject.create()
 
-    private val loadMoviesUseCase: UseCase<Unit, Observable<List<Movie>>> = LoadMoviesUseCase()
+    private val loadMoviesUseCase: UseCase<Unit, Single<List<Movie>>> = LoadMoviesUseCase()
     private val saveMoviesCacheUseCase: UseCase<List<Movie>, Unit> = SaveMoviesCacheUseCase()
     private val loadMoviesCacheUseCase: UseCase<Unit, List<Movie>> = LoadMoviesCacheUseCase()
     private val cleanMoviesCacheUseCase: UseCase<Unit, Unit> = CleanMoviesCacheUseCase()
