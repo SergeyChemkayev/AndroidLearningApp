@@ -1,5 +1,6 @@
 package com.example.androidlearningapp.movies.ui.activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,14 +18,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidlearningapp.R;
-import com.example.androidlearningapp.movies.data.api.MovieCacheSource;
-import com.example.androidlearningapp.movies.data.api.MovieRoomCacheManager;
-import com.example.androidlearningapp.movies.data.api.MoviesNetwork;
-import com.example.androidlearningapp.movies.data.api.MoviesRemoteSource;
+import com.example.androidlearningapp.movies.data.extensions.ToastKt;
 import com.example.androidlearningapp.movies.data.listeners.OnMovieClickListener;
+import com.example.androidlearningapp.movies.data.viewModels.DataViewModel;
+import com.example.androidlearningapp.movies.data.viewModels.DataViewModelInterface;
 import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
-import com.example.androidlearningapp.movies.entity.MovieList;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
@@ -32,19 +31,17 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import kotlin.Unit;
 
 public class DataActivity extends AppCompatActivity implements OnMovieClickListener {
-    public static final int MOVIES_PER_PAGE = 7;
     public static final int REQUEST_CODE_MOVIE = 1;
     private RecyclerView recyclerView;
     private View emptyView;
     private MoviesAdapter adapter;
-    private MoviesRemoteSource moviesRemoteSource = MoviesNetwork.getInstance();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isAbleToLoadMovies = true;
-    private int pageNumber = 1;
-    private MovieCacheSource movieCacheManager;
+    private DataViewModelInterface dataViewModel;
 
     public static void open(Context context) {
         Intent intent = new Intent(context, DataActivity.class);
@@ -56,17 +53,27 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
         emptyView = findViewById(R.id.data_empty_view);
-        movieCacheManager = new MovieRoomCacheManager();
+        dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         adapter = new MoviesAdapter();
         adapter.setOnMovieClickListener(this);
+        initRx();
         initRecyclerView();
         initSwipeRefreshLayout();
-        getMovies(pageNumber);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        compositeDisposable.add(dataViewModel.getMoviesSubject()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onGetMoviesSuccess));
+        dataViewModel.getMovies(true);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        dataViewModel.disposeMovies();
         compositeDisposable.dispose();
     }
 
@@ -120,7 +127,7 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && isAbleToAddMovies()) {
-                    getMovies(pageNumber + 1);
+                    dataViewModel.getMovies(false);
                 }
             }
         });
@@ -134,8 +141,8 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     private void initSwipeRefreshLayout() {
         swipeRefreshLayout = findViewById(R.id.data_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (isAbleToLoadMovies) {
-                getMovies(1);
+            if (this.isAbleToLoadMovies) {
+                dataViewModel.getMovies(true);
             }
         });
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -144,61 +151,59 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
                 android.R.color.holo_red_light);
     }
 
-    private void getMovies(int pageNumber) {
-        this.pageNumber = pageNumber;
-        isAbleToLoadMovies = false;
-        if (pageNumber == 1) {
-            swipeRefreshLayout.setRefreshing(true);
-        } else {
-            adapter.showLoading();
-        }
-        compositeDisposable.add(moviesRemoteSource.getMovieListObservable()
-                .map(MovieList::getList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetMoviesSuccess, this::onGetMoviesError));
-    }
 
     public void onGetMoviesSuccess(List<Movie> movies) {
-        hideLoading();
-        isAbleToLoadMovies = movies != null && movies.size() == MOVIES_PER_PAGE;
-        addMovies(movies);
-        updateViewsVisibility();
+        List<MovieElement> list = new ArrayList<>();
+        list.addAll(movies);
+        adapter.setMovies(list);
     }
 
-    public void onGetMoviesError(Throwable error) {
-        hideLoading();
-        isAbleToLoadMovies = true;
-        adapter.setMovies(new ArrayList<>(movieCacheManager.getMovies()));
-        Toast.makeText(DataActivity.this, R.string.error_message, Toast.LENGTH_SHORT).show();
+    private void initRx() {
+        compositeDisposable.add(dataViewModel.isAbleToLoadMovies()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setIsAbleToLoadMoviesValue));
+        compositeDisposable.add(dataViewModel.isRefreshing()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setRefreshing));
+        compositeDisposable.add(dataViewModel.isLoadingMore()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setLoading));
+        compositeDisposable.add(dataViewModel.getRecyclerViewVisibility()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setRecyclerViewVisibility));
+        compositeDisposable.add(dataViewModel.getEmptyViewVisibility()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setEmptyViewVisibility));
+        compositeDisposable.add(dataViewModel.isError()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showError));
     }
 
-    private void hideLoading() {
-        if (pageNumber == 1) {
-            swipeRefreshLayout.setRefreshing(false);
+    private void setIsAbleToLoadMoviesValue(boolean value) {
+        isAbleToLoadMovies = value;
+    }
+
+    private void setRefreshing(boolean value) {
+        swipeRefreshLayout.setRefreshing(value);
+    }
+
+    private void setLoading(boolean value) {
+        if (value) {
+            adapter.showLoading();
         } else {
             adapter.dismissLoading();
         }
     }
 
-    private void addMovies(List<Movie> movies) {
-        List<MovieElement> list = new ArrayList<>();
-        list.addAll(movies);
-        if (pageNumber == 1) {
-            adapter.setMovies(list);
-            movieCacheManager.removeMovies();
-        } else {
-            adapter.addMovies(list);
-        }
-        movieCacheManager.putMovies(movies);
+    private void setRecyclerViewVisibility(boolean value) {
+        recyclerView.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 
-    private void updateViewsVisibility() {
-        if (adapter.getItemCount() == 0) {
-            recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
-        }
+    private void setEmptyViewVisibility(boolean value) {
+        emptyView.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
+    private void showError(Unit u) {
+        ToastKt.toast(this, getText(R.string.error_message).toString());
     }
 }

@@ -2,9 +2,9 @@ package com.example.androidlearningapp.movies.data.api;
 
 import com.example.androidlearningapp.movies.entity.MovieList;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 
 public interface MoviesRemoteSource {
 
-    Single<MovieList> getMovieListObservable();
+    Observable<MovieList> getMovieListSingle();
 }
