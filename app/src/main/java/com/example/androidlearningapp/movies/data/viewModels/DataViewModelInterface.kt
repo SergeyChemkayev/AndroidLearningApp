@@ -1,19 +1,18 @@
 package com.example.androidlearningapp.movies.data.viewModels
 
 import com.example.androidlearningapp.movies.entity.Movie
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.Observable
 
 interface DataViewModelInterface {
 
-    val isAbleToLoadMovies: Subject<Boolean>
-    val isLoadingMore: Subject<Boolean>
-    val isRefreshing: Subject<Boolean>
-    val emptyViewVisibility: Subject<Boolean>
-    val recyclerViewVisibility: Subject<Boolean>
-    val isError: Subject<Unit>
+    val isAbleToLoadMovies: Observable<Boolean>
+    val isLoadingMore: Observable<Boolean>
+    val isRefreshing: Observable<Boolean>
+    val emptyViewVisibility: Observable<Boolean>
+    val recyclerViewVisibility: Observable<Boolean>
+    val isError: Observable<Unit>
 
-    val moviesSubject: BehaviorSubject<List<Movie>>
+    val moviesSubject: Observable<List<Movie>>
 
     fun getMovies(refresh: Boolean)
     fun disposeMovies()

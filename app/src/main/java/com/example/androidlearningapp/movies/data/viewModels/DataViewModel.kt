@@ -12,7 +12,7 @@ const val MOVIES_PER_PAGE = 7
 
 class DataViewModel : ViewModel(), DataViewModelInterface {
 
-    override var isAbleToLoadMovies: PublishSubject<Boolean> = PublishSubject.create()
+    override val isAbleToLoadMovies: PublishSubject<Boolean> = PublishSubject.create()
     override val isLoadingMore: PublishSubject<Boolean> = PublishSubject.create()
     override val isRefreshing: PublishSubject<Boolean> = PublishSubject.create()
     override val emptyViewVisibility: PublishSubject<Boolean> = PublishSubject.create()
@@ -26,7 +26,7 @@ class DataViewModel : ViewModel(), DataViewModelInterface {
 
     override val moviesSubject: BehaviorSubject<List<Movie>> = BehaviorSubject.create()
     private var pageNumber = 1
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun getMovies(refresh: Boolean) {
         if (refresh) {
