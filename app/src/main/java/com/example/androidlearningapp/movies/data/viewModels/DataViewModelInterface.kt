@@ -15,5 +15,5 @@ interface DataViewModelInterface {
     val moviesSubject: Observable<List<MovieElement>>
 
     fun getMovies(refresh: Boolean)
-    fun disposeMovies()
+    fun clearMovies()
 }

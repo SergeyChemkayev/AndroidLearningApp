@@ -78,7 +78,7 @@ class DataViewModel : ViewModel(), DataViewModelInterface {
         isAbleToLoadMovies.onNext(false)
     }
 
-    override fun disposeMovies() {
-        compositeDisposable.dispose()
+    override fun clearMovies() {
+        compositeDisposable.clear()
     }
 }

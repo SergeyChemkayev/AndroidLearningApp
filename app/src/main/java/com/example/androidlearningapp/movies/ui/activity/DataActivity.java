@@ -26,7 +26,6 @@ import com.example.androidlearningapp.movies.entity.Movie;
 import com.example.androidlearningapp.movies.entity.MovieElement;
 import com.example.androidlearningapp.movies.ui.adapter.MoviesAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -71,9 +70,14 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        dataViewModel.clearMovies();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        dataViewModel.disposeMovies();
         compositeDisposable.dispose();
     }
 
