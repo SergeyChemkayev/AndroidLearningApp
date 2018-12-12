@@ -56,7 +56,6 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         adapter = new MoviesAdapter();
         adapter.setOnMovieClickListener(this);
-        initRx();
         initRecyclerView();
         initSwipeRefreshLayout();
     }
@@ -64,6 +63,7 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        initViewModel();
         compositeDisposable.add(dataViewModel.getMoviesSubject()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetMoviesSuccess));
@@ -158,7 +158,7 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
         adapter.setMovies(list);
     }
 
-    private void initRx() {
+    private void initViewModel() {
         compositeDisposable.add(dataViewModel.isAbleToLoadMovies()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setIsAbleToLoadMoviesValue));
