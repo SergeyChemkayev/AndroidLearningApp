@@ -3,6 +3,7 @@ package com.example.androidlearningapp.movies.data.viewModels
 import android.arch.lifecycle.ViewModel
 import com.example.androidlearningapp.movies.data.useCase.*
 import com.example.androidlearningapp.movies.entity.Movie
+import com.example.androidlearningapp.movies.entity.MovieElement
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -24,7 +25,7 @@ class DataViewModel : ViewModel(), DataViewModelInterface {
     private val loadMoviesCacheUseCase: UseCase<Unit, List<Movie>> = LoadMoviesCacheUseCase()
     private val cleanMoviesCacheUseCase: UseCase<Unit, Unit> = CleanMoviesCacheUseCase()
 
-    override val moviesSubject: BehaviorSubject<List<Movie>> = BehaviorSubject.create()
+    override val moviesSubject: BehaviorSubject<List<MovieElement>> = BehaviorSubject.create()
     private var pageNumber = 1
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 

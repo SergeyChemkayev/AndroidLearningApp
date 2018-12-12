@@ -152,10 +152,8 @@ public class DataActivity extends AppCompatActivity implements OnMovieClickListe
     }
 
 
-    public void onGetMoviesSuccess(List<Movie> movies) {
-        List<MovieElement> list = new ArrayList<>();
-        list.addAll(movies);
-        adapter.setMovies(list);
+    public void onGetMoviesSuccess(List<MovieElement> movies) {
+        adapter.setMovies(movies);
     }
 
     private void initViewModel() {

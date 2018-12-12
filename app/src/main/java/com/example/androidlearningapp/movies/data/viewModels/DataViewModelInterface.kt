@@ -1,6 +1,6 @@
 package com.example.androidlearningapp.movies.data.viewModels
 
-import com.example.androidlearningapp.movies.entity.Movie
+import com.example.androidlearningapp.movies.entity.MovieElement
 import io.reactivex.Observable
 
 interface DataViewModelInterface {
@@ -12,7 +12,7 @@ interface DataViewModelInterface {
     val recyclerViewVisibility: Observable<Boolean>
     val isError: Observable<Unit>
 
-    val moviesSubject: Observable<List<Movie>>
+    val moviesSubject: Observable<List<MovieElement>>
 
     fun getMovies(refresh: Boolean)
     fun disposeMovies()
