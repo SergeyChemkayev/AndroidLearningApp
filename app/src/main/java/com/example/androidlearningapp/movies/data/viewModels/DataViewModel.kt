@@ -11,7 +11,12 @@ import io.reactivex.subjects.PublishSubject
 
 const val MOVIES_PER_PAGE = 7
 
-class DataViewModel : ViewModel(), DataViewModelInterface {
+class DataViewModel(
+        private val loadMoviesUseCase: UseCase<Unit, Single<List<Movie>>> = LoadMoviesUseCase(),
+        private val saveMoviesCacheUseCase: UseCase<List<Movie>, Unit> = SaveMoviesCacheUseCase(),
+        private val loadMoviesCacheUseCase: UseCase<Unit, List<Movie>> = LoadMoviesCacheUseCase(),
+        private val cleanMoviesCacheUseCase: UseCase<Unit, Unit> = CleanMoviesCacheUseCase()
+) : ViewModel(), DataViewModelInterface {
 
     override val isAbleToLoadMovies: PublishSubject<Boolean> = PublishSubject.create()
     override val isLoadingMore: PublishSubject<Boolean> = PublishSubject.create()
@@ -19,11 +24,6 @@ class DataViewModel : ViewModel(), DataViewModelInterface {
     override val emptyViewVisibility: PublishSubject<Boolean> = PublishSubject.create()
     override val recyclerViewVisibility: PublishSubject<Boolean> = PublishSubject.create()
     override val isError: PublishSubject<Unit> = PublishSubject.create()
-
-    private val loadMoviesUseCase: UseCase<Unit, Single<List<Movie>>> = LoadMoviesUseCase()
-    private val saveMoviesCacheUseCase: UseCase<List<Movie>, Unit> = SaveMoviesCacheUseCase()
-    private val loadMoviesCacheUseCase: UseCase<Unit, List<Movie>> = LoadMoviesCacheUseCase()
-    private val cleanMoviesCacheUseCase: UseCase<Unit, Unit> = CleanMoviesCacheUseCase()
 
     override val moviesSubject: BehaviorSubject<List<MovieElement>> = BehaviorSubject.create()
     private var pageNumber = 1
