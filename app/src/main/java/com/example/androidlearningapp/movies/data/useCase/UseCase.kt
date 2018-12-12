@@ -1,6 +1,6 @@
 package com.example.androidlearningapp.movies.data.useCase
 
-interface UseCase<REQUEST, RESPONSE> {
+interface UseCase<INPUT, OUTPUT> {
 
-    fun execute(request: REQUEST): RESPONSE
+    fun execute(request: INPUT): OUTPUT
 }
