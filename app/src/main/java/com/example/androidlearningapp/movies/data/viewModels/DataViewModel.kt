@@ -1,21 +1,20 @@
 package com.example.androidlearningapp.movies.data.viewModels
 
 import android.arch.lifecycle.ViewModel
-import com.example.androidlearningapp.movies.data.useCase.*
+import com.example.androidlearningapp.movies.data.useCase.LoadMoviesCacheUseCase
+import com.example.androidlearningapp.movies.data.useCase.LoadMoviesUseCase
+import com.example.androidlearningapp.movies.data.useCase.UseCase
 import com.example.androidlearningapp.movies.entity.Movie
 import com.example.androidlearningapp.movies.entity.MovieElement
-import io.reactivex.Single
+import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-const val MOVIES_PER_PAGE = 7
-
 class DataViewModel(
-        private val loadMoviesUseCase: UseCase<Unit, Single<List<Movie>>> = LoadMoviesUseCase(),
-        private val saveMoviesCacheUseCase: UseCase<List<Movie>, Unit> = SaveMoviesCacheUseCase(),
-        private val loadMoviesCacheUseCase: UseCase<Unit, List<Movie>> = LoadMoviesCacheUseCase(),
-        private val cleanMoviesCacheUseCase: UseCase<Unit, Unit> = CleanMoviesCacheUseCase()
+        private val loadMoviesUseCase: UseCase<Int, Completable> = LoadMoviesUseCase(),
+        private val loadMoviesCacheUseCase: UseCase<Unit, Flowable<List<Movie>>> = LoadMoviesCacheUseCase()
 ) : ViewModel(), DataViewModelInterface {
 
     override val isAbleToLoadMovies: PublishSubject<Boolean> = PublishSubject.create()
@@ -34,7 +33,9 @@ class DataViewModel(
             pageNumber = 1
         }
         showLoading()
-        compositeDisposable.add(loadMoviesUseCase.execute(Unit)
+        compositeDisposable.add(loadMoviesUseCase.execute(pageNumber)
+                .subscribe({}, this::onGetMovieError))
+        compositeDisposable.add(loadMoviesCacheUseCase.execute(Unit)
                 .subscribe(this::onGetMoviesSuccess, this::onGetMovieError))
     }
 
@@ -59,21 +60,14 @@ class DataViewModel(
 
     private fun onGetMoviesSuccess(movies: List<Movie>) {
         hideLoading()
-        isAbleToLoadMovies.onNext(movies.size == MOVIES_PER_PAGE)
-        if (pageNumber > 1) {
-            moviesSubject.onNext(if (moviesSubject.hasValue()) moviesSubject.value!!.plus(movies) else movies)
-        } else {
-            cleanMoviesCacheUseCase.execute(Unit)
-            moviesSubject.onNext(movies)
-        }
-        saveMoviesCacheUseCase.execute(movies)
+        isAbleToLoadMovies.onNext(true)
+        moviesSubject.onNext(movies)
         pageNumber++
         updateViewsVisibility()
     }
 
     private fun onGetMovieError(e: Throwable) {
         hideLoading()
-        moviesSubject.onNext(loadMoviesCacheUseCase.execute(Unit))
         isError.onNext(Unit)
         isAbleToLoadMovies.onNext(false)
     }

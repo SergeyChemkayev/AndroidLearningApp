@@ -3,6 +3,7 @@ package com.example.androidlearningapp.movies.data.api
 import com.example.androidlearningapp.movies.data.AppRoomDatabase
 import com.example.androidlearningapp.movies.entity.Movie
 import com.example.androidlearningapp.movies.entity.RoomMovie
+import io.reactivex.Flowable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -18,8 +19,13 @@ class MovieRoomCacheManager : MovieCacheSource {
         }
     }
 
-    override fun getMovies(): List<Movie> {
-        return runBlocking { GlobalScope.async { parseRoomMoviesToMovies(appRoomDataBaseDao.getAll()) }.await() }
+    override fun getMovies(): Flowable<List<Movie>> {
+        return runBlocking {
+            GlobalScope.async {
+                appRoomDataBaseDao.getAll()
+                        .map { it -> parseRoomMoviesToMovies(it) }
+            }.await()
+        }
     }
 
     override fun removeMovies() {

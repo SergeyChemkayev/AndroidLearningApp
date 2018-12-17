@@ -8,6 +8,7 @@ import android.util.Log
 import com.example.androidlearningapp.movies.data.MovieCacheConstruct.MovieEntry
 import com.example.androidlearningapp.movies.data.MovieCacheDbHelper
 import com.example.androidlearningapp.movies.entity.Movie
+import io.reactivex.Flowable
 
 class MovieCacheManager(context: Context) : MovieCacheSource {
 
@@ -27,7 +28,7 @@ class MovieCacheManager(context: Context) : MovieCacheSource {
         }
     }
 
-    override fun getMovies(): List<Movie> {
+    override fun getMovies(): Flowable<List<Movie>> {
         val db = dbHelper.readableDatabase
         val projection = arrayOf(BaseColumns._ID, MovieEntry.COLUMN_NAME_NAME, MovieEntry.COLUMN_NAME_NAME_ENG, MovieEntry.COLUMN_NAME_PREMIERE, MovieEntry.COLUMN_NAME_DESCRIPTION, MovieEntry.COLUMN_NAME_COVER)
         val cursor = db.query(
@@ -39,7 +40,7 @@ class MovieCacheManager(context: Context) : MovieCacheSource {
                 null,
                 null
         )
-        return parseCursorToMovies(cursor)
+        return Flowable.just(parseCursorToMovies(cursor))
     }
 
     override fun removeMovies() {
