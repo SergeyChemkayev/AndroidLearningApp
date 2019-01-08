@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.example.androidlearningapp.R
 import com.example.androidlearningapp.movies.data.api.PreferencesApi
-import com.example.androidlearningapp.movies.data.api.PreferencesManager
 import kotlinx.android.synthetic.main.activity_preferences.*
+import javax.inject.Inject
 
 class PreferencesActivity : AppCompatActivity() {
 
@@ -19,12 +19,13 @@ class PreferencesActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var preferencesApi: PreferencesApi
+    @Inject
+    lateinit var preferencesApi: PreferencesApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
-        preferencesApi = PreferencesManager(getPreferences(android.content.Context.MODE_PRIVATE))
+        DaggerPreferencesComponent.create().inject(this)
         getData()
     }
 

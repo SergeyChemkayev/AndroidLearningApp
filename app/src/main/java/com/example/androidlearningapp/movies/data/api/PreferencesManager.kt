@@ -1,11 +1,12 @@
 package com.example.androidlearningapp.movies.data.api
 
 import android.content.SharedPreferences
+import javax.inject.Inject
 
 private const val SAVED_TEXT = "saved_text"
 private const val SAVED_CHECK = "saved_check"
 
-class PreferencesManager(private var sPref: SharedPreferences) : PreferencesApi {
+class PreferencesManager @Inject constructor(private var sPref: SharedPreferences) : PreferencesApi {
 
     override fun setText(text: String) {
         sPref.edit().putString(SAVED_TEXT, text).apply()
