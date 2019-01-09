@@ -6,7 +6,9 @@ import javax.inject.Inject
 private const val SAVED_TEXT = "saved_text"
 private const val SAVED_CHECK = "saved_check"
 
-class PreferencesManager @Inject constructor(private var sPref: SharedPreferences) : PreferencesApi {
+class PreferencesManager @Inject constructor() : PreferencesApi {
+
+    override lateinit var sPref: SharedPreferences
 
     override fun setText(text: String) {
         sPref.edit().putString(SAVED_TEXT, text).apply()

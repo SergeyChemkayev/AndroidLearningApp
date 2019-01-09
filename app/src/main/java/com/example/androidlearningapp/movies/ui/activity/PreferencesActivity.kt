@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.example.androidlearningapp.R
+import com.example.androidlearningapp.movies.data.DaggerPreferencesComponent
 import com.example.androidlearningapp.movies.data.api.PreferencesApi
 import kotlinx.android.synthetic.main.activity_preferences.*
 import javax.inject.Inject
@@ -26,6 +27,7 @@ class PreferencesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences)
         DaggerPreferencesComponent.create().inject(this)
+        preferencesApi.sPref = getPreferences(android.content.Context.MODE_PRIVATE)
         getData()
     }
 
